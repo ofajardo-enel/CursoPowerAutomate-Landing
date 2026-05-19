@@ -1,572 +1,813 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Curso Power Automate Web - Landing interactiva</title>
-  <style>
-    :root{
-      --enel-red: #e61400;
-      --enel-blue: #0555fa;
-      --enel-green: #008c5a;
-      --enel-orange: #ff5a0f;
-      --enel-magenta: #ff0f64;
-      --enel-lightblue: #41b9e6;
-      --enel-pink: #ff4687;
-      --enel-greenlight: #55be5a;
-      --bg: #0b0d12;
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.72);
-      --line: rgba(255,255,255,.14);
-      --shadow: 0 18px 60px rgba(0,0,0,.35);
-      --radius: 18px;
-      --font: Arial, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso Power Automate Web — Landing Interactiva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --enel-red: #e61400;
+            --enel-blue: #0555fa;
+            --enel-green: #008c5a;
+            --enel-orange: #ff5a0f;
+            --enel-magenta: #ff0f64;
+            --enel-lightblue: #41b9e6;
+            --enel-pink: #ff4687;
+            --enel-greenlight: #55be5a;
+            --primary: var(--enel-blue);
+            --primary-light: #3b7dfc;
+            --accent: var(--enel-greenlight);
+            --accent-dark: var(--enel-green);
+            --dark: #0a0c14;
+            --dark-card: #141824;
+            --dark-surface: #10141e;
+            --text: #e8ecf4;
+            --text-muted: #94a3b8;
+            --glass: rgba(255,255,255,0.04);
+            --glass-border: rgba(255,255,255,0.08);
+            --gradient-1: linear-gradient(135deg, var(--enel-blue), var(--enel-lightblue));
+            --gradient-2: linear-gradient(135deg, var(--enel-greenlight), var(--enel-blue));
+            --gradient-3: linear-gradient(135deg, var(--enel-red), var(--enel-orange));
+            --gradient-hero: linear-gradient(135deg, #0a0c14 0%, #101830 50%, #0a0c14 100%);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.3);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-    body.light{
-      --bg: #f7f7fb;
-      --text: rgba(0,0,0,.88);
-      --muted: rgba(0,0,0,.64);
-      --line: rgba(0,0,0,.10);
-      --shadow: 0 18px 60px rgba(0,0,0,.15);
-    }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body {
+            font-family: var(--font);
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        img { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
+        ul { list-style: none; }
 
-    html, body{height:100%;}
-    body{
-      margin:0;
-      font-family: var(--font);
-      background: radial-gradient(1200px 800px at 20% 10%, rgba(5,85,250,.24), transparent 60%),
-                  radial-gradient(900px 700px at 85% 15%, rgba(230,20,0,.22), transparent 55%),
-                  radial-gradient(900px 800px at 70% 85%, rgba(0,140,90,.22), transparent 55%),
-                  var(--bg);
-      color: var(--text);
-      overflow-x:hidden;
-    }
+        .bg-grid {
+            position: fixed; inset: 0; z-index: 0;
+            background-image:
+                linear-gradient(rgba(5,85,250,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(5,85,250,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+        .bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .bg-orbs .orb {
+            position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.12;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+        .bg-orbs .orb:nth-child(1) { width: 600px; height: 600px; background: var(--enel-blue); top: -10%; left: -10%; }
+        .bg-orbs .orb:nth-child(2) { width: 500px; height: 500px; background: var(--enel-lightblue); top: 40%; right: -15%; animation-delay: -7s; }
+        .bg-orbs .orb:nth-child(3) { width: 400px; height: 400px; background: var(--enel-red); bottom: 10%; left: 30%; animation-delay: -14s; }
 
-    a{color:inherit; text-decoration:none;}
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -40px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
 
-    .topbar{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(14px);
-      background: linear-gradient(to bottom, rgba(11,13,18,.78), rgba(11,13,18,.40));
-      border-bottom: 1px solid var(--line);
-    }
-    body.light .topbar{background: linear-gradient(to bottom, rgba(247,247,251,.86), rgba(247,247,251,.55));}
+        .scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--gradient-1); z-index: 1001; transition: width 0.1s; }
 
-    .topbar-inner{
-      max-width: 1200px; margin:0 auto; padding: 12px 16px;
-      display:flex; align-items:center; gap:12px; justify-content:space-between;
-    }
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 16px 0; transition: var(--transition); }
+        .navbar.scrolled { background: rgba(10,12,20,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); padding: 10px 0; }
+        .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { font-size: 1.1rem; font-weight: 800; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .nav-links { display: flex; gap: 6px; align-items: center; }
+        .nav-links a { padding: 8px 14px; font-size: 0.82rem; font-weight: 500; color: var(--text-muted); border-radius: 8px; transition: var(--transition); }
+        .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--glass); }
+        .nav-cta { background: var(--gradient-1) !important; color: white !important; font-weight: 600 !important; padding: 10px 18px !important; border-radius: 8px !important; }
+        .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(5,85,250,0.4); }
+        .nav-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
 
-    .brand{display:flex; align-items:center; gap:10px; min-width: 260px;}
-    .dot{width:12px;height:12px;border-radius:999px;background: conic-gradient(from 180deg, var(--enel-red), var(--enel-orange), var(--enel-greenlight), var(--enel-green), var(--enel-blue), var(--enel-magenta)); box-shadow:0 0 0 6px rgba(255,255,255,.07);}
-    .brand h1{font-size:14px; margin:0; letter-spacing:.2px;}
-    .brand p{margin:0; font-size:12px; color:var(--muted);}
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-    .controls{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+        .hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 0 80px; text-align: center; z-index: 1; }
+        .hero-content { max-width: 850px; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; font-size: 0.85rem; font-weight: 500; color: var(--accent); margin-bottom: 32px; animation: fadeInUp 0.8s ease; }
+        .hero-badge .pulse { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.5); } }
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 4.2rem); font-weight: 900; line-height: 1.1; letter-spacing: -2px; margin-bottom: 24px; animation: fadeInUp 0.8s ease 0.1s both; }
+        .hero h1 .gradient-text { background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero h1 .accent-text { background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; animation: fadeInUp 0.8s ease 0.2s both; }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; animation: fadeInUp 0.8s ease 0.3s both; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; font-size: 0.95rem; font-weight: 600; border-radius: 12px; border: none; cursor: pointer; transition: var(--transition); font-family: var(--font); }
+        .btn-primary { background: var(--gradient-1); color: white; box-shadow: 0 4px 20px rgba(5,85,250,0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(5,85,250,0.5); }
+        .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--glass-border); }
+        .btn-outline:hover { background: var(--glass); border-color: var(--primary-light); }
+        .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 60px; animation: fadeInUp 0.8s ease 0.4s both; }
+        .stat { text-align: center; padding: 20px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); }
+        .stat-number { font-size: 2rem; font-weight: 800; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
 
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 8px 10px; border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      cursor:pointer; user-select:none;
-      font-size: 12px; color: var(--text);
-    }
-    body.light .chip{background: rgba(0,0,0,.03);}
+        section { position: relative; z-index: 1; padding: 100px 0; }
+        .section-header { text-align: center; max-width: 600px; margin: 0 auto 60px; }
+        .section-label { display: inline-block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 16px; }
+        .section-header h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -1px; line-height: 1.2; margin-bottom: 16px; }
+        .section-header p { color: var(--text-muted); font-size: 1rem; }
 
-    .wrap{max-width:1200px; margin: 0 auto; padding: 18px 16px 80px;}
+        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
+        .timeline::before { content: ''; position: absolute; left: 30px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--enel-blue), var(--enel-lightblue), var(--enel-greenlight)); }
+        .timeline-item { position: relative; padding-left: 80px; margin-bottom: 48px; opacity: 0; transform: translateY(30px); transition: all 0.6s ease; cursor: pointer; }
+        .timeline-item.visible { opacity: 1; transform: translateY(0); }
+        .timeline-dot { position: absolute; left: 18px; top: 4px; width: 26px; height: 26px; border-radius: 50%; background: var(--dark); border: 3px solid var(--enel-blue); z-index: 2; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: var(--primary-light); }
+        .timeline-item:nth-child(2) .timeline-dot { border-color: var(--enel-lightblue); color: var(--enel-lightblue); }
+        .timeline-item:nth-child(3) .timeline-dot { border-color: var(--enel-greenlight); color: var(--enel-greenlight); }
+        .timeline-item:nth-child(4) .timeline-dot { border-color: var(--enel-orange); color: var(--enel-orange); }
+        .timeline-item:nth-child(5) .timeline-dot { border-color: var(--enel-green); color: var(--enel-green); }
+        .timeline-item:nth-child(6) .timeline-dot { border-color: var(--enel-magenta); color: var(--enel-magenta); }
+        .timeline-card { background: var(--dark-card); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 28px; transition: var(--transition); display: flex; align-items: center; gap: 24px; }
+        .timeline-card:hover { border-color: var(--primary-light); transform: translateX(8px); box-shadow: 0 8px 32px rgba(5,85,250,0.15); }
+        .timeline-card-icon { width: 60px; height: 60px; border-radius: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; background: var(--glass); border: 1px solid var(--glass-border); }
+        .timeline-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+        .timeline-card p { color: var(--text-muted); font-size: 0.88rem; }
 
-    .hero{
-      display:grid; grid-template-columns: 1.2fr .8fr;
-      gap:18px; align-items:stretch;
-      margin-top: 18px;
-    }
-    @media (max-width: 900px){
-      .hero{grid-template-columns: 1fr;}
-      .brand{min-width:unset;}
-    }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .feature-card { background: var(--dark-card); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 32px; transition: var(--transition); position: relative; overflow: hidden; }
+        .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient-1); opacity: 0; transition: var(--transition); }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-card:hover { border-color: rgba(5,85,250,0.3); transform: translateY(-4px); box-shadow: var(--shadow); }
+        .feature-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 18px; background: var(--glass); border: 1px solid var(--glass-border); }
+        .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+        .feature-card p { color: var(--text-muted); font-size: 0.88rem; }
 
-    .card{
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      box-shadow: var(--shadow);
-      border-radius: var(--radius);
-      overflow:hidden;
-    }
-    body.light .card{background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.75));}
+        .labs-grid { display: grid; gap: 16px; }
+        .lab-card { background: var(--dark-card); border: 1px solid var(--glass-border); border-radius: var(--radius); overflow: hidden; transition: var(--transition); }
+        .lab-card:hover { border-color: rgba(5,85,250,0.3); }
+        .lab-header { padding: 22px 28px; cursor: pointer; display: flex; align-items: center; gap: 16px; font-weight: 700; font-size: 1rem; }
+        .lab-header .lab-num { width: 36px; height: 36px; border-radius: 10px; background: var(--gradient-1); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; color: white; }
+        .lab-header .arrow { margin-left: auto; transition: var(--transition); color: var(--text-muted); }
+        .lab-card[open] .lab-header .arrow { transform: rotate(180deg); }
+        .lab-body { padding: 0 28px 24px 80px; }
+        .lab-body ul { display: flex; flex-direction: column; gap: 8px; }
+        .lab-body ul li { font-size: 0.88rem; color: var(--text-muted); padding-left: 18px; position: relative; line-height: 1.6; }
+        .lab-body ul li::before { content: '\2192'; position: absolute; left: 0; color: var(--primary-light); }
 
-    .hero-left{padding: 22px 22px 18px; position:relative;}
-    .kicker{display:flex; align-items:center; gap:10px; color: var(--muted); font-size: 12px; flex-wrap:wrap;}
-    .badge{padding: 4px 10px; border-radius: 999px; border:1px solid var(--line); background: rgba(0,0,0,.12);}
-    body.light .badge{background: rgba(255,255,255,.7);}
+        .timer-section { background: var(--dark-card); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 32px; max-width: 600px; margin: 40px auto 0; text-align: center; }
+        .timer-display { font-size: 2.5rem; font-weight: 800; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 16px 0; }
+        .progress-bar { height: 8px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); overflow: hidden; margin: 16px 0; }
+        .progress-bar > div { height: 100%; width: 0%; background: var(--gradient-2); transition: width 0.5s; }
+        .timer-btns { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
 
-    .title{font-size: 34px; line-height:1.05; margin: 12px 0 8px; letter-spacing:-.6px;}
-    .subtitle{margin:0; color: var(--muted); font-size: 14px; line-height: 1.5; max-width: 64ch;}
+        .qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .qr-card { background: var(--dark-card); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 28px; }
+        .qr-item { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+        .qr-item img { width: 80px; height: 80px; border-radius: 12px; border: 1px solid var(--glass-border); background: white; }
+        .qr-item h4 { font-size: 0.95rem; font-weight: 700; }
+        .qr-item small { font-size: 0.78rem; color: var(--text-muted); }
 
-    .cta{display:flex; gap:10px; flex-wrap:wrap; margin-top: 14px;}
-    .btn{
-      display:inline-flex; align-items:center; gap:10px;
-      padding: 10px 12px; border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.08);
-      cursor:pointer; font-size: 13px; font-weight: 600;
-    }
-    .btn.primary{
-      background: linear-gradient(90deg, var(--enel-red), var(--enel-orange));
-      border-color: transparent;
-      color: white;
-      box-shadow: 0 18px 50px rgba(230,20,0,.22);
-    }
-    .btn.secondary{background: linear-gradient(90deg, rgba(5,85,250,.26), rgba(65,185,230,.18));}
+        .note { display: none; border-left: 3px solid var(--enel-orange); padding: 14px 18px; background: rgba(255,90,15,0.08); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 0.85rem; margin-top: 16px; color: var(--text-muted); }
+        body.facilitator .note { display: block; }
 
-    .hero-right{display:grid; grid-template-rows: auto 1fr;}
-    .stats{padding: 16px 16px 12px; display:grid; gap:10px;}
-    .stat{padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.06); display:flex; justify-content:space-between; align-items:center; gap:10px;}
-    body.light .stat{background: rgba(0,0,0,.03);}
-    .stat b{font-size: 13px;}
-    .stat span{color: var(--muted); font-size: 12px;}
+        .controls-bar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 999; display: flex; gap: 8px; padding: 10px 16px; background: rgba(10,12,20,0.9); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 50px; }
+        .ctrl-btn { padding: 8px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; background: var(--glass); border: 1px solid var(--glass-border); cursor: pointer; transition: var(--transition); color: var(--text); font-family: var(--font); }
+        .ctrl-btn:hover, .ctrl-btn.active { background: var(--gradient-1); border-color: transparent; color: white; }
 
-    .timer{padding: 14px 16px 18px; border-top: 1px solid var(--line);}
-    .timer-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
-    .timer h3{margin:0; font-size: 13px;}
-    .timer small{color: var(--muted);}
-    .progress{height:10px; border-radius:999px; background: rgba(255,255,255,.10); border:1px solid var(--line); overflow:hidden; margin-top:10px;}
-    .progress > div{height:100%; width:0%; background: linear-gradient(90deg, var(--enel-blue), var(--enel-lightblue), var(--enel-greenlight));}
+        .checklist { display: flex; flex-direction: column; gap: 10px; }
+        .checklist label { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); font-size: 0.88rem; cursor: pointer; transition: var(--transition); }
+        .checklist label:hover { border-color: var(--primary-light); }
+        .checklist input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--enel-blue); }
 
-    .layout{display:grid; grid-template-columns: 280px 1fr; gap: 16px; margin-top: 18px;}
-    @media (max-width: 980px){.layout{grid-template-columns: 1fr;} .sidenav{position:relative; top:auto;}}
+        .footer { position: relative; z-index: 1; padding: 60px 0 30px; border-top: 1px solid var(--glass-border); }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .footer-brand { font-weight: 800; font-size: 1.1rem; }
+        .footer-text { color: var(--text-muted); font-size: 0.85rem; }
 
-    .sidenav{position: sticky; top: 68px; align-self:start; padding: 12px;}
-    .navlist{display:grid; gap:8px;}
-    .navitem{padding: 10px 10px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.05); display:flex; justify-content:space-between; align-items:center; font-size: 13px;}
-    body.light .navitem{background: rgba(0,0,0,.03);}
-    .navitem.active{outline: 2px solid rgba(5,85,250,.35);}
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-    .main{display:grid; gap: 16px;}
-    section{scroll-margin-top: 92px;}
-    .section{padding: 18px 18px 10px;}
-    .section h2{margin:0 0 6px; font-size: 18px;}
-    .section p{margin:0 0 12px; color: var(--muted); line-height: 1.6;}
+        .hide { display: none !important; }
 
-    .grid{display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px;}
-    @media (max-width: 900px){.grid{grid-template-columns: 1fr;}}
-
-    .tile{padding: 14px; border-radius: 16px; border: 1px solid var(--line); background: rgba(255,255,255,.05);}
-    body.light .tile{background: rgba(0,0,0,.03);}
-    .tile h3{margin:0 0 6px; font-size: 14px;}
-    .tile p{margin:0; color: var(--muted); font-size: 12px; line-height:1.5;}
-
-    details{border:1px solid var(--line); border-radius:16px; background: rgba(255,255,255,.05); padding: 10px 12px;}
-    body.light details{background: rgba(0,0,0,.03);}
-    details + details{margin-top: 10px;}
-    summary{cursor:pointer; list-style:none; font-weight:700; font-size: 13px;}
-    summary::-webkit-details-marker{display:none;}
-    .steps{margin: 10px 0 0; padding-left: 18px; color: var(--muted); line-height: 1.6; font-size: 13px;}
-
-    .note{border-left: 3px solid var(--enel-orange); padding: 10px 12px; background: rgba(255,90,15,.12); border-radius: 12px; margin: 10px 0 0; font-size: 13px; display:none;}
-    body.facilitator .note{display:block;}
-
-    .qrgrid{display:grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items:center;}
-    @media (max-width: 700px){.qrgrid{grid-template-columns: 1fr;}}
-    .qr{display:flex; gap: 12px; align-items:center;}
-    .qr img{width: 96px; height: 96px; border-radius: 12px; border:1px solid var(--line); background:white;}
-
-    .search{width: 100%; padding: 10px 12px; border-radius: 12px; border:1px solid var(--line); background: rgba(255,255,255,.06); color: var(--text); outline:none; font-size: 13px;}
-    body.light .search{background: rgba(0,0,0,.03);}
-
-    .tag{font-size: 11px; color: var(--muted); border:1px solid var(--line); padding: 3px 8px; border-radius:999px;}
-
-    .img-hero{position:absolute; right:-40px; top:-40px; width: 240px; height: 240px; background: conic-gradient(from 180deg, rgba(230,20,0,.55), rgba(255,90,15,.45), rgba(85,190,90,.45), rgba(0,140,90,.45), rgba(5,85,250,.45), rgba(255,15,100,.45)); filter: blur(24px); opacity: .35; border-radius: 999px; pointer-events:none;}
-
-    .footer{margin-top: 18px; padding: 16px 18px; color: var(--muted); font-size: 12px;}
-    .hide{display:none !important;}
-  </style>
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(10,12,20,0.95); backdrop-filter: blur(20px); padding: 20px; border-bottom: 1px solid var(--glass-border); }
+            .nav-toggle { display: block; }
+            .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .timeline::before { left: 16px; }
+            .timeline-item { padding-left: 56px; }
+            .timeline-dot { left: 4px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .qr-grid { grid-template-columns: 1fr; }
+            section { padding: 60px 0; }
+            .controls-bar { bottom: 12px; padding: 8px 12px; }
+            .ctrl-btn { padding: 6px 12px; font-size: 0.75rem; }
+        }
+    </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand" title="Landing interactiva del curso">
-        <div class="dot"></div>
-        <div>
-          <h1>Curso Power Automate Web</h1>
-          <p>Landing interactiva • sesión virtual (3h)</p>
-        </div>
-      </div>
-      <div class="controls">
-        <input id="q" class="search" placeholder="Buscar en el contenido (ej: SharePoint, AI Builder, triggers)…" aria-label="Buscar en el contenido del curso" />
-        <div class="chip" id="toggleFac" role="button" tabindex="0" aria-pressed="false" aria-label="Activar modo facilitador">🎤 Modo facilitador</div>
-        <div class="chip" id="toggleTheme" role="button" tabindex="0" aria-label="Cambiar tema claro/oscuro">🌓 Tema</div>
-        <div class="chip" id="toggleFocus" role="button" tabindex="0" aria-pressed="false" aria-label="Activar modo enfoque">🧘 Enfoque</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <div class="hero">
-      <div class="card hero-left">
-        <div class="img-hero"></div>
-        <div class="kicker">
-          <span class="badge">Power Automate • SharePoint • AI Hub/AI Builder • SAP Scripts</span>
-          <span class="tag">Material de apoyo interactivo</span>
-        </div>
-        <h2 class="title">De la idea a la automatización</h2>
-        <p class="subtitle">Curso práctico para optimizar procesos empresariales digitales. Navega por módulos, abre laboratorios con paso a paso, registra asistencia y usa enlaces directos durante la sesión.</p>
-
-        <div class="cta">
-          <a class="btn primary" href="https://make.powerautomate.com" target="_blank" rel="noreferrer">⚡ Abrir Power Automate</a>
-          <a class="btn secondary" href="https://enelcom.sharepoint.com/sites/CursoPowerAutomate" target="_blank" rel="noreferrer">📚 Abrir SharePoint del curso</a>
-          <button class="btn" id="startTimer">⏱️ Iniciar cronómetro 3h</button>
-          <button class="btn" id="resetTimer">🔁 Reiniciar</button>
-        </div>
-
-        <div class="note">💡 <b>Tips de facilitación</b>: usa <b>Modo facilitador</b> para ver guiones rápidos por sección. En <b>Enfoque</b> ocultas la barra lateral para proyectar contenido limpio.</div>
-      </div>
-
-      <div class="card hero-right">
-        <div class="stats">
-          <div class="stat"><b>Duración</b><span>3 horas (virtual)</span></div>
-          <div class="stat"><b>Enfoque</b><span>Hands-on + buenas prácticas + SAP</span></div>
-          <div class="stat"><b>Recursos</b><span>Power Automate + SharePoint + QR asistencia</span></div>
-        </div>
-        <div class="timer">
-          <div class="timer-row">
-            <h3>Cronómetro de sesión</h3>
-            <small id="tlabel" aria-live="polite" aria-atomic="true">00:00:00 • 0% completado</small>
-          </div>
-          <div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso de la sesión"><div id="pbar"></div></div>
-          <div class="note">🧭 <b>Agenda sugerida 3h</b>: ajusta el ritmo con el cronómetro. Puedes marcar laboratorios como “hecho” abajo y volver rápido desde el menú lateral.</div>
-        </div>
-      </div>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-orbs">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
     </div>
 
-    <div class="layout" id="layout">
-      <aside class="card sidenav" id="sidenav" aria-label="Navegación del curso">
-        <div style="padding:14px 14px 10px">
-          <h3 style="margin:0 0 8px;font-size:14px">Navegación</h3>
-          <p style="margin:0;color:var(--muted);font-size:12px;line-height:1.5">Haz clic para saltar. La búsqueda filtra secciones.</p>
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#hero" class="nav-logo">⚡ Power Automate</a>
+            <div class="nav-links" id="navLinks">
+                <a href="#agenda">Agenda</a>
+                <a href="#objetivos">Objetivos</a>
+                <a href="#tipos">Flujos</a>
+                <a href="#triggers">Triggers</a>
+                <a href="#labs">Labs</a>
+                <a href="#ai">AI Builder</a>
+                <a href="#gobierno">Gobierno</a>
+                <a href="#sap">SAP</a>
+                <a href="https://make.powerautomate.com" target="_blank" rel="noreferrer" class="nav-cta">Abrir Power Automate</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu">&#9776;</button>
         </div>
-        <nav class="navlist" id="navlist" style="padding: 0 12px 12px" aria-label="Secciones del curso"></nav>
-      </aside>
+    </nav>
 
-      <main class="main" id="main">
-
-        <section id="agenda" class="card section">
-          <h2>Agenda (temario)</h2>
-          <p>Basado en el temario del curso original (Power Automate, triggers/conectores, laboratorios con SharePoint, AI Hub/AI Builder, gobierno, scripts SAP y cierre). Ajustado para sesión virtual de 3h.</p>
-          <div class="grid">
-            <div class="tile"><h3>1) Bienvenida + objetivos</h3><p>Contexto del curso y qué construirás durante la sesión.</p></div>
-            <div class="tile"><h3>2) Tipos de flujos</h3><p>Automatizados, instantáneos y programados (cuándo usar cada uno).</p></div>
-            <div class="tile"><h3>3) Triggers y conectores</h3><p>Disparadores, conectores, filtros y ejemplos comunes.</p></div>
-            <div class="tile"><h3>4) Laboratorios con SharePoint</h3><p>4 laboratorios guiados con paso a paso expandible.</p></div>
-            <div class="tile"><h3>5) AI Hub / AI Builder</h3><p>Introducción y laboratorio de extracción de texto (PDF/imagen).</p></div>
-            <div class="tile"><h3>6) Gobierno + SAP Scripts</h3><p>Buenas prácticas, continuidad, documentación e introducción a scripts SAP.</p></div>
-          </div>
-          <div class="note">🎤 <b>Guion rápido</b>: abre con “¿qué proceso repetitivo te quita más tiempo?” y conecta la respuesta con el módulo de flujos + el laboratorio que más les aplique.</div>
-        </section>
-
-        <section id="objetivos" class="card section">
-          <h2>Bienvenida y objetivos</h2>
-          <p>Power Automate permite automatizar tareas y procesos repetitivos conectando diferentes aplicaciones y servicios, aumentando productividad y estandarización.</p>
-          <details open>
-            <summary>✅ Objetivo principal</summary>
-            <ul class="steps"><li>Automatizar tareas y procesos repetitivos dentro de una organización.</li><li>Conectar apps/servicios (Microsoft 365 y otros) para flujos end-to-end.</li></ul>
-          </details>
-          <details>
-            <summary>🧩 ¿Qué es Power Automate?</summary>
-            <ul class="steps"><li>Herramienta para automatizar flujos repetitivos.</li><li>Integra apps como Outlook, Teams y SharePoint.</li><li>Soporta usuarios de negocio y desarrolladores.</li></ul>
-          </details>
-          <div class="note">🎤 <b>Guion rápido</b>: pide 2 ejemplos de aprobaciones (contratos, compras, permisos) y anota cuáles conectores usarían.</div>
-        </section>
-
-        <section id="tipos" class="card section">
-          <h2>Tipos de flujos (Power Automate)</h2>
-          <p>En el curso se trabajan tres categorías: automatizados, instantáneos y programados.</p>
-          <div class="grid">
-            <div class="tile"><h3>Automatizados</h3><p>Se activan por un evento (ej. “cuando se cree un ítem”).</p></div>
-            <div class="tile"><h3>Instantáneos</h3><p>Se ejecutan manualmente por botón (ideal para “alta rápida”).</p></div>
-            <div class="tile"><h3>Programados</h3><p>Se corren por horario/intervalo (recordatorios, rutinas).</p></div>
-          </div>
-          <details>
-            <summary>🧠 Regla práctica (sugerida)</summary>
-            <ul class="steps"><li><b>Evento</b> → Automatizado.</li><li><b>Usuario dispara</b> → Instantáneo.</li><li><b>Reloj</b> → Programado.</li></ul>
-          </details>
-          <div class="note">🎤 <b>Guion rápido</b>: muestra 1 ejemplo por tipo y pregunta: “¿qué pasaría si lo hicieras con el tipo equivocado?”</div>
-        </section>
-
-        <section id="triggers" class="card section">
-          <h2>Triggers y conectores</h2>
-          <p>Los <b>triggers</b> (disparadores) inician flujos y los <b>conectores</b> enlazan aplicaciones (Outlook, Teams, SharePoint, etc.).</p>
-          <details open>
-            <summary>🔔 Triggers (disparadores)</summary>
-            <ul class="steps"><li>Inician el flujo cuando ocurre un evento (creación/modificación, llegada de email, etc.).</li><li>Buenas prácticas: filtrar temprano para evitar ejecuciones innecesarias.</li></ul>
-          </details>
-          <details>
-            <summary>🔌 Conectores</summary>
-            <ul class="steps"><li>Conectan servicios: Microsoft 365, SharePoint, Teams, Excel Online, Power BI, etc.</li><li>Define permisos (cuentas/conexiones) y alcance de datos.</li></ul>
-          </details>
-          <details>
-            <summary>🧪 Mini-demo sugerida (5 min)</summary>
-            <ul class="steps"><li>“When an item is created” (SharePoint) → “Send an email” (Outlook).</li><li>Agrega condición por “Estado = Pendiente”.</li></ul>
-          </details>
-          <div class="note">🎤 <b>Guion rápido</b>: recalca “trigger correcto + filtro temprano = menos ruido + mejor performance”.</div>
-        </section>
-
-        <section id="labs" class="card section">
-          <h2>Laboratorios prácticos con SharePoint (paso a paso)</h2>
-          <p>Laboratorios basados en el curso: listas/bibliotecas, aprobaciones, recordatorios desde Excel Online y actualización de dataset Power BI.</p>
-
-          <details open>
-            <summary>🧪 Lab 1 — Alta de registros en lista + adjuntos + notificación</summary>
-            <ul class="steps">
-              <li>Crear lista en SharePoint (columnas: Título, Estado, Responsable, Fecha límite).</li>
-              <li>En Power Automate: crear <b>Automated cloud flow</b> con trigger “When an item is created”.</li>
-              <li>Acción: “Get attachments” + “Get attachment content”.</li>
-              <li>Guardar adjuntos en biblioteca (acción “Create file”).</li>
-              <li>Enviar email/Teams con link al ítem y a la carpeta del documento.</li>
-              <li>Agregar control de errores: scope “Try/Catch” (sugerido).</li>
-            </ul>
-            <div class="note">🎤 Tip: pide que 1 participante cree un ítem y otro valide que le llegó la notificación.</div>
-          </details>
-
-          <details>
-            <summary>🧪 Lab 2 — Aprobación de documentos en biblioteca</summary>
-            <ul class="steps">
-              <li>Crear biblioteca “Contratos” (metadatos: Área, Monto, Estado).</li>
-              <li>Flow automatizado: trigger “When a file is created (properties only)”.</li>
-              <li>Acción “Start and wait for an approval”.</li>
-              <li>Si aprueba: actualizar metadato Estado=“Aprobado” y mover a carpeta “Aprobados”.</li>
-              <li>Si rechaza: Estado=“Rechazado” + notificar al autor con comentarios.</li>
-            </ul>
-            <div class="note">🎤 Tip: muestra la tarjeta de aprobación en Teams/Outlook y cómo queda el audit trail.</div>
-          </details>
-
-          <details>
-            <summary>🧪 Lab 3 — Recordatorios programados de vencimientos (Excel Online)</summary>
-            <ul class="steps">
-              <li>En SharePoint: archivo Excel “Contratos.xlsx” con columnas: Contrato, Responsable, Vence, Email.</li>
-              <li>Flow <b>Scheduled</b>: diario (o cada X horas).</li>
-              <li>Acción “List rows present in a table”.</li>
-              <li>Filtrar vencimientos (ej. hoy+7 días) y enviar recordatorio.</li>
-              <li>Opcional: escribir una columna “Último aviso” para evitar duplicados.</li>
-            </ul>
-            <div class="note">🎤 Tip: enseña filtro OData vs condición y por qué OData reduce carga.</div>
-          </details>
-
-          <details>
-            <summary>🧪 Lab 4 — Actualizar dataset de Power BI</summary>
-            <ul class="steps">
-              <li>Pre-requisito: dataset publicado en Power BI con refresh habilitado.</li>
-              <li>Flow instantáneo o programado (según caso).</li>
-              <li>Acción Power BI: “Refresh a dataset”.</li>
-              <li>Notificar resultado al canal de Teams (éxito/error).</li>
-              <li>Opcional: registrar ejecución en una lista “Ejecuciones” (SharePoint).</li>
-            </ul>
-            <div class="note">🎤 Tip: conecta esto con gobierno: inventario de flujos + logging.</div>
-          </details>
-
-        </section>
-
-        <section id="ai" class="card section">
-          <h2>Módulo AI Hub y AI Builder</h2>
-          <p>Se introduce el módulo AI Hub y AI Builder para integrar modelos de IA en flujos; incluye un laboratorio para capturar textos de PDFs o imágenes.</p>
-          <details open>
-            <summary>🤖 ¿Qué veremos?</summary>
-            <ul class="steps"><li>Dónde encontrar AI Hub en Power Automate.</li><li>Modelos preconstruidos vs personalizados.</li><li>Lab: extracción de texto (PDF/imagen) y envío a SharePoint/Teams.</li></ul>
-          </details>
-          <details>
-            <summary>🧪 Lab sugerido — Extraer texto y crear registro</summary>
-            <ul class="steps"><li>Trigger: manual (Instant flow) con carga de archivo.</li><li>Acción AI Builder: OCR / extracción.</li><li>Guardar resultado en lista (campo “Texto extraído”).</li></ul>
-          </details>
-          <div class="note">🎤 Tip: cierra con un ejemplo real (actas, facturas, contratos) y menciona consideraciones de datos.</div>
-        </section>
-
-        <section id="gobierno" class="card section">
-          <h2>Gobierno y buenas prácticas</h2>
-          <p>El curso incluye recomendaciones como compartir flujos, documentar técnicamente, y llevar inventario de flujos.</p>
-          <details open>
-            <summary>🧭 Checklist de buenas prácticas</summary>
-            <ul class="steps">
-              <li><input type="checkbox"/> Compartir flujos para evitar único propietario.</li>
-              <li><input type="checkbox"/> Documentación técnica (paso a paso).</li>
-              <li><input type="checkbox"/> Inventario simple de flujos (Excel o lista).</li>
-              <li><input type="checkbox"/> Uso de ambientes/soluciones (sugerido) para control.</li>
-              <li><input type="checkbox"/> Versionado y registro de cambios.</li>
-            </ul>
-          </details>
-          <div class="note">🎤 Tip: pide que elijan 1 práctica para adoptar “desde mañana”.</div>
-        </section>
-
-        <section id="sap" class="card section">
-          <h2>Automatización de reportes SAP mediante Scripts</h2>
-          <p>Se cubre la automatización de reportes SAP usando scripts grabados, con lineamientos para creación y gestión.</p>
-          <details open>
-            <summary>🧩 Conceptos clave</summary>
-            <ul class="steps"><li>Automatización reduce tiempos y errores en generación de reportes.</li><li>Scripts grabados ejecutan tareas repetitivas de forma precisa.</li><li>Lineamientos para gestionar scripts y asegurar consistencia.</li></ul>
-          </details>
-          <div class="note">🎤 Tip: conecta SAP scripts con Power Automate solo a nivel conceptual (orquestación) y cierra con controles de seguridad.</div>
-        </section>
-
-        <section id="asistencia" class="card section">
-          <h2>Registro de asistencia / recursos (QR)</h2>
-          <p>Usa estos QR para abrir rápido los recursos del curso. Si tienes un formulario de asistencia (Microsoft Forms), reemplaza el enlace del botón principal por el del formulario.</p>
-          <div class="qrgrid">
-            <div class="tile">
-              <h3>Recursos del curso</h3>
-              <div class="qr">
-                <img src="assets/qr_sharepoint.png" alt="QR SharePoint" />
-                <div>
-                  <div style="font-weight:700">SharePoint del curso</div>
-                  <div style="color:var(--muted);font-size:12px">https://enelcom.sharepoint.com/sites/CursoPowerAutomate</div>
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="pulse"></span>
+                    Sesion Virtual &bull; 3 Horas
                 </div>
-              </div>
-              <div style="height:10px"></div>
-              <div class="qr">
-                <img src="assets/qr_power_automate.png" alt="QR Power Automate" />
-                <div>
-                  <div style="font-weight:700">Power Automate</div>
-                  <div style="color:var(--muted);font-size:12px">https://make.powerautomate.com</div>
+                <h1>
+                    <span class="gradient-text">Power Automate</span><br>
+                    De la idea a la <span class="accent-text">automatizacion</span>
+                </h1>
+                <p>Curso practico para optimizar procesos empresariales digitales. Navega por modulos, completa laboratorios paso a paso y usa enlaces directos durante la sesion.</p>
+                <div class="hero-buttons">
+                    <a href="#labs" class="btn btn-primary">&#129514; Ver Laboratorios</a>
+                    <a href="https://enelcom.sharepoint.com/sites/CursoPowerAutomate" target="_blank" rel="noreferrer" class="btn btn-outline">&#128218; SharePoint del Curso</a>
                 </div>
-              </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number" data-count="6">0</div>
+                        <div class="stat-label">Modulos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" data-count="4">0</div>
+                        <div class="stat-label">Laboratorios</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" data-count="3">0</div>
+                        <div class="stat-label">Horas</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" data-count="100">0</div>
+                        <div class="stat-label">% Practico</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AGENDA -->
+    <section id="agenda">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Ruta de Aprendizaje</span>
+                <h2>Agenda del Curso</h2>
+                <p>6 modulos para llevarte de cero a automatizar procesos reales con Power Automate</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item" onclick="document.getElementById('objetivos').scrollIntoView({behavior:'smooth'})">
+                    <div class="timeline-dot">01</div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-icon">&#127919;</div>
+                        <div><h3>Bienvenida + Objetivos</h3><p>Contexto del curso y que construiras durante la sesion.</p></div>
+                    </div>
+                </div>
+                <div class="timeline-item" onclick="document.getElementById('tipos').scrollIntoView({behavior:'smooth'})">
+                    <div class="timeline-dot">02</div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-icon">&#9889;</div>
+                        <div><h3>Tipos de Flujos</h3><p>Automatizados, instantaneos y programados (cuando usar cada uno).</p></div>
+                    </div>
+                </div>
+                <div class="timeline-item" onclick="document.getElementById('triggers').scrollIntoView({behavior:'smooth'})">
+                    <div class="timeline-dot">03</div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-icon">&#128268;</div>
+                        <div><h3>Triggers y Conectores</h3><p>Disparadores, conectores, filtros y ejemplos comunes.</p></div>
+                    </div>
+                </div>
+                <div class="timeline-item" onclick="document.getElementById('labs').scrollIntoView({behavior:'smooth'})">
+                    <div class="timeline-dot">04</div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-icon">&#129514;</div>
+                        <div><h3>Laboratorios con SharePoint</h3><p>4 laboratorios guiados con paso a paso expandible.</p></div>
+                    </div>
+                </div>
+                <div class="timeline-item" onclick="document.getElementById('ai').scrollIntoView({behavior:'smooth'})">
+                    <div class="timeline-dot">05</div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-icon">&#129302;</div>
+                        <div><h3>AI Hub / AI Builder</h3><p>Introduccion y laboratorio de extraccion de texto (PDF/imagen).</p></div>
+                    </div>
+                </div>
+                <div class="timeline-item" onclick="document.getElementById('gobierno').scrollIntoView({behavior:'smooth'})">
+                    <div class="timeline-dot">06</div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-icon">&#128737;</div>
+                        <div><h3>Gobierno + SAP Scripts</h3><p>Buenas practicas, continuidad, documentacion e introduccion a scripts SAP.</p></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="tile">
-              <h3>Asistencia (sugerido)</h3>
-              <p style="margin:0 0 10px;color:var(--muted)">Opción rápida: usa un Microsoft Forms o una lista en SharePoint para asistencia.</p>
-              <details open>
-                <summary>📝 Plantilla rápida (en la sesión)</summary>
-                <ul class="steps">
-                  <li>Nombre completo</li>
-                  <li>Área</li>
-                  <li>Correo</li>
-                  <li>¿Qué proceso quiere automatizar?</li>
-                </ul>
-              </details>
-              <div class="note">🎤 Tip: al final, revisa 3 respuestas y elige 1 caso para “próxima automatización”.</div>
+            <div class="timer-section reveal">
+                <h3 style="font-size:1rem;margin-bottom:4px;">&#9201; Cronometro de Sesion</h3>
+                <p style="font-size:0.85rem;color:var(--text-muted);">Duracion total: 3 horas</p>
+                <div class="timer-display" id="tlabel" aria-live="polite" aria-atomic="true">00:00:00</div>
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso de la sesion"><div id="pbar"></div></div>
+                <p style="font-size:0.8rem;color:var(--text-muted);" id="pctLabel">0% completado</p>
+                <div class="timer-btns">
+                    <button class="btn btn-primary" id="startTimer" style="padding:10px 20px;font-size:0.85rem;">&#9654; Iniciar</button>
+                    <button class="btn btn-outline" id="resetTimer" style="padding:10px 20px;font-size:0.85rem;">&#128257; Reiniciar</button>
+                </div>
             </div>
-          </div>
-        </section>
-
-        <section id="cierre" class="card section">
-          <h2>Cierre y espacio de preguntas</h2>
-          <p>Repaso de conceptos clave, dudas y próximos pasos para aplicar lo aprendido en procesos reales.</p>
-          <details open>
-            <summary>✅ Cierre (sugerido)</summary>
-            <ul class="steps"><li>Recapitular: tipos de flujos, triggers/conectores, labs, AI, gobierno.</li><li>Pedir 1 compromiso: “automatizaré ____ esta semana”.</li><li>Compartir el repositorio / SharePoint del curso.</li></ul>
-          </details>
-          <div class="note">🎤 Tip: termina con “si solo recuerdas 3 cosas…” y menciónalas.</div>
-        </section>
-
-        <div class="card footer">
-          <div><b>Nota</b>: Esta landing es un material de apoyo interactivo. Puedes editar textos, tiempos y enlaces según el grupo. Incluye paleta corporativa Enel (hex) y tipografía con fallback (Arial) cuando Enel Roobert no esté disponible.</div>
         </div>
+    </section>
 
-      </main>
+    <!-- OBJETIVOS -->
+    <section id="objetivos" style="background:var(--dark-surface);">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Modulo 01</span>
+                <h2>Bienvenida y Objetivos</h2>
+                <p>Power Automate permite automatizar tareas y procesos repetitivos conectando diferentes aplicaciones y servicios</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#127919;</div>
+                    <h3>Objetivo Principal</h3>
+                    <p>Automatizar tareas y procesos repetitivos dentro de una organizacion. Conectar apps/servicios (Microsoft 365 y otros) para flujos end-to-end.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#129513;</div>
+                    <h3>Que es Power Automate?</h3>
+                    <p>Herramienta para automatizar flujos repetitivos. Integra apps como Outlook, Teams y SharePoint. Soporta usuarios de negocio y desarrolladores.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#128640;</div>
+                    <h3>Que Construiras?</h3>
+                    <p>Flujos automatizados con SharePoint, aprobaciones, recordatorios inteligentes y conexion con AI Builder para extraccion de datos.</p>
+                </div>
+            </div>
+            <div class="note">&#127908; <b>Guion rapido</b>: pide 2 ejemplos de aprobaciones (contratos, compras, permisos) y anota cuales conectores usarian.</div>
+        </div>
+    </section>
+
+    <!-- TIPOS DE FLUJOS -->
+    <section id="tipos">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Modulo 02</span>
+                <h2>Tipos de Flujos</h2>
+                <p>Tres categorias principales de flujos en Power Automate</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#9889;</div>
+                    <h3>Automatizados</h3>
+                    <p>Se activan por un evento (ej. "cuando se cree un item"). Ideales para reaccionar a cambios en datos.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#9757;</div>
+                    <h3>Instantaneos</h3>
+                    <p>Se ejecutan manualmente por boton (ideal para "alta rapida"). El usuario decide cuando disparar.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#128336;</div>
+                    <h3>Programados</h3>
+                    <p>Se corren por horario/intervalo (recordatorios, rutinas). Perfectos para procesos recurrentes.</p>
+                </div>
+            </div>
+            <div class="feature-card reveal" style="margin-top:24px;max-width:600px;margin-left:auto;margin-right:auto;">
+                <div class="feature-icon">&#129504;</div>
+                <h3>Regla Practica</h3>
+                <p><strong>Evento</strong> &rarr; Automatizado &nbsp;|&nbsp; <strong>Usuario dispara</strong> &rarr; Instantaneo &nbsp;|&nbsp; <strong>Reloj</strong> &rarr; Programado</p>
+            </div>
+            <div class="note">&#127908; <b>Guion rapido</b>: muestra 1 ejemplo por tipo y pregunta: "que pasaria si lo hicieras con el tipo equivocado?"</div>
+        </div>
+    </section>
+
+    <!-- TRIGGERS -->
+    <section id="triggers" style="background:var(--dark-surface);">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Modulo 03</span>
+                <h2>Triggers y Conectores</h2>
+                <p>Los triggers inician flujos y los conectores enlazan aplicaciones (Outlook, Teams, SharePoint, etc.)</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#128276;</div>
+                    <h3>Triggers (Disparadores)</h3>
+                    <p>Inician el flujo cuando ocurre un evento. Buenas practicas: filtrar temprano para evitar ejecuciones innecesarias.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#128268;</div>
+                    <h3>Conectores</h3>
+                    <p>Conectan servicios: Microsoft 365, SharePoint, Teams, Excel Online, Power BI, etc. Define permisos y alcance de datos.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#129514;</div>
+                    <h3>Mini-Demo (5 min)</h3>
+                    <p>"When an item is created" (SharePoint) &rarr; "Send an email" (Outlook). Agrega condicion por "Estado = Pendiente".</p>
+                </div>
+            </div>
+            <div class="note">&#127908; <b>Guion rapido</b>: recalca "trigger correcto + filtro temprano = menos ruido + mejor performance".</div>
+        </div>
+    </section>
+
+    <!-- LABORATORIOS -->
+    <section id="labs">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Modulo 04 &mdash; Hands-On</span>
+                <h2>Laboratorios Practicos</h2>
+                <p>4 laboratorios basados en listas/bibliotecas SharePoint, aprobaciones, recordatorios y Power BI</p>
+            </div>
+            <div class="labs-grid">
+                <details class="lab-card reveal">
+                    <summary class="lab-header">
+                        <span class="lab-num">1</span>
+                        <span>Alta de registros + adjuntos + notificacion</span>
+                        <span class="arrow">&#9660;</span>
+                    </summary>
+                    <div class="lab-body">
+                        <ul>
+                            <li>Crear lista en SharePoint (columnas: Titulo, Estado, Responsable, Fecha limite).</li>
+                            <li>En Power Automate: crear <strong>Automated cloud flow</strong> con trigger "When an item is created".</li>
+                            <li>Accion: "Get attachments" + "Get attachment content".</li>
+                            <li>Guardar adjuntos en biblioteca (accion "Create file").</li>
+                            <li>Enviar email/Teams con link al item y a la carpeta del documento.</li>
+                            <li>Agregar control de errores: scope "Try/Catch" (sugerido).</li>
+                        </ul>
+                        <div class="note">&#127908; Tip: pide que 1 participante cree un item y otro valide que le llego la notificacion.</div>
+                    </div>
+                </details>
+                <details class="lab-card reveal">
+                    <summary class="lab-header">
+                        <span class="lab-num">2</span>
+                        <span>Aprobacion de documentos en biblioteca</span>
+                        <span class="arrow">&#9660;</span>
+                    </summary>
+                    <div class="lab-body">
+                        <ul>
+                            <li>Crear biblioteca "Contratos" (metadatos: Area, Monto, Estado).</li>
+                            <li>Flow automatizado: trigger "When a file is created (properties only)".</li>
+                            <li>Accion "Start and wait for an approval".</li>
+                            <li>Si aprueba: actualizar metadato Estado="Aprobado" y mover a carpeta "Aprobados".</li>
+                            <li>Si rechaza: Estado="Rechazado" + notificar al autor con comentarios.</li>
+                        </ul>
+                        <div class="note">&#127908; Tip: muestra la tarjeta de aprobacion en Teams/Outlook y como queda el audit trail.</div>
+                    </div>
+                </details>
+                <details class="lab-card reveal">
+                    <summary class="lab-header">
+                        <span class="lab-num">3</span>
+                        <span>Recordatorios programados de vencimientos (Excel Online)</span>
+                        <span class="arrow">&#9660;</span>
+                    </summary>
+                    <div class="lab-body">
+                        <ul>
+                            <li>En SharePoint: archivo Excel "Contratos.xlsx" con columnas: Contrato, Responsable, Vence, Email.</li>
+                            <li>Flow <strong>Scheduled</strong>: diario (o cada X horas).</li>
+                            <li>Accion "List rows present in a table".</li>
+                            <li>Filtrar vencimientos (ej. hoy+7 dias) y enviar recordatorio.</li>
+                            <li>Opcional: escribir una columna "Ultimo aviso" para evitar duplicados.</li>
+                        </ul>
+                        <div class="note">&#127908; Tip: ensena filtro OData vs condicion y por que OData reduce carga.</div>
+                    </div>
+                </details>
+                <details class="lab-card reveal">
+                    <summary class="lab-header">
+                        <span class="lab-num">4</span>
+                        <span>Actualizar dataset de Power BI</span>
+                        <span class="arrow">&#9660;</span>
+                    </summary>
+                    <div class="lab-body">
+                        <ul>
+                            <li>Pre-requisito: dataset publicado en Power BI con refresh habilitado.</li>
+                            <li>Flow instantaneo o programado (segun caso).</li>
+                            <li>Accion Power BI: "Refresh a dataset".</li>
+                            <li>Notificar resultado al canal de Teams (exito/error).</li>
+                            <li>Opcional: registrar ejecucion en una lista "Ejecuciones" (SharePoint).</li>
+                        </ul>
+                        <div class="note">&#127908; Tip: conecta esto con gobierno: inventario de flujos + logging.</div>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI BUILDER -->
+    <section id="ai" style="background:var(--dark-surface);">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Modulo 05</span>
+                <h2>AI Hub y AI Builder</h2>
+                <p>Integra modelos de IA en tus flujos para extraer datos de PDFs, imagenes y documentos</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#129302;</div>
+                    <h3>Que es AI Hub?</h3>
+                    <p>Hub centralizado en Power Automate donde encuentras modelos preconstruidos y personalizados de IA listos para integrar.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#128196;</div>
+                    <h3>Modelos Preconstruidos</h3>
+                    <p>OCR, extraccion de entidades, analisis de sentimiento, clasificacion de texto. Sin necesidad de entrenamiento.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#129514;</div>
+                    <h3>Lab: Extraer texto y crear registro</h3>
+                    <p>Trigger manual con carga de archivo &rarr; AI Builder OCR &rarr; Guardar resultado en lista SharePoint ("Texto extraido").</p>
+                </div>
+            </div>
+            <div class="note">&#127908; Tip: cierra con un ejemplo real (actas, facturas, contratos) y menciona consideraciones de datos.</div>
+        </div>
+    </section>
+
+    <!-- GOBIERNO -->
+    <section id="gobierno">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Modulo 06</span>
+                <h2>Gobierno y Buenas Practicas</h2>
+                <p>Recomendaciones para compartir flujos, documentar tecnicamente y llevar inventario</p>
+            </div>
+            <div class="checklist reveal" style="max-width:600px;margin:0 auto;">
+                <label><input type="checkbox"> Compartir flujos para evitar unico propietario</label>
+                <label><input type="checkbox"> Documentacion tecnica (paso a paso)</label>
+                <label><input type="checkbox"> Inventario simple de flujos (Excel o lista)</label>
+                <label><input type="checkbox"> Uso de ambientes/soluciones para control</label>
+                <label><input type="checkbox"> Versionado y registro de cambios</label>
+            </div>
+            <div class="note">&#127908; Tip: pide que elijan 1 practica para adoptar "desde manana".</div>
+        </div>
+    </section>
+
+    <!-- SAP -->
+    <section id="sap" style="background:var(--dark-surface);">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Automatizacion avanzada</span>
+                <h2>Reportes SAP mediante Scripts</h2>
+                <p>Automatizacion de reportes SAP usando scripts grabados con lineamientos para creacion y gestion</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#9201;</div>
+                    <h3>Reduccion de Tiempos</h3>
+                    <p>La automatizacion reduce tiempos y errores en generacion de reportes SAP de forma significativa.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#128203;</div>
+                    <h3>Scripts Grabados</h3>
+                    <p>Ejecutan tareas repetitivas de forma precisa. Lineamientos para gestionar scripts y asegurar consistencia.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">&#128279;</div>
+                    <h3>Orquestacion</h3>
+                    <p>Conecta SAP scripts con Power Automate a nivel conceptual (orquestacion) con controles de seguridad.</p>
+                </div>
+            </div>
+            <div class="note">&#127908; Tip: conecta SAP scripts con Power Automate solo a nivel conceptual y cierra con controles de seguridad.</div>
+        </div>
+    </section>
+
+    <!-- ASISTENCIA / QR -->
+    <section id="asistencia">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Recursos</span>
+                <h2>Registro de Asistencia y QR</h2>
+                <p>Usa estos QR para abrir rapido los recursos del curso durante la sesion</p>
+            </div>
+            <div class="qr-grid reveal">
+                <div class="qr-card">
+                    <h3 style="font-size:1rem;margin-bottom:16px;">&#128218; Recursos del Curso</h3>
+                    <div class="qr-item">
+                        <img src="assets/qr_sharepoint.png" alt="QR SharePoint del curso">
+                        <div><h4>SharePoint del Curso</h4><small>enelcom.sharepoint.com/sites/CursoPowerAutomate</small></div>
+                    </div>
+                    <div class="qr-item">
+                        <img src="assets/qr_power_automate.png" alt="QR Power Automate">
+                        <div><h4>Power Automate</h4><small>make.powerautomate.com</small></div>
+                    </div>
+                </div>
+                <div class="qr-card">
+                    <h3 style="font-size:1rem;margin-bottom:16px;">&#128221; Asistencia (Sugerido)</h3>
+                    <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:16px;">Usa un Microsoft Forms o lista en SharePoint con estos campos:</p>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        <div style="padding:10px 16px;background:var(--glass);border-radius:var(--radius-sm);border:1px solid var(--glass-border);font-size:0.85rem;">&#128100; Nombre completo</div>
+                        <div style="padding:10px 16px;background:var(--glass);border-radius:var(--radius-sm);border:1px solid var(--glass-border);font-size:0.85rem;">&#127970; Area</div>
+                        <div style="padding:10px 16px;background:var(--glass);border-radius:var(--radius-sm);border:1px solid var(--glass-border);font-size:0.85rem;">&#128231; Correo</div>
+                        <div style="padding:10px 16px;background:var(--glass);border-radius:var(--radius-sm);border:1px solid var(--glass-border);font-size:0.85rem;">&#128161; Que proceso quiere automatizar?</div>
+                    </div>
+                    <div class="note">&#127908; Tip: al final, revisa 3 respuestas y elige 1 caso para "proxima automatizacion".</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CIERRE -->
+    <section id="cierre" style="background:var(--dark-surface);">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Reflexion Final</span>
+                <h2>Cierre y Preguntas</h2>
+            </div>
+            <div class="feature-card reveal" style="max-width:700px;margin:0 auto;text-align:center;padding:48px;">
+                <h3 style="font-size:1.3rem;margin-bottom:16px;">Si solo recuerdas 3 cosas...</h3>
+                <div style="display:grid;gap:12px;margin-top:24px;text-align:left;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--glass);border-radius:var(--radius-sm);border:1px solid var(--glass-border);">
+                        <span style="font-size:1.3rem;">1&#65039;&#8419;</span>
+                        <span style="font-size:0.9rem;">Tipos de flujos, triggers/conectores, labs, AI, gobierno.</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--glass);border-radius:var(--radius-sm);border:1px solid var(--glass-border);">
+                        <span style="font-size:1.3rem;">2&#65039;&#8419;</span>
+                        <span style="font-size:0.9rem;">Tu compromiso: "automatizare ____ esta semana".</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--glass);border-radius:var(--radius-sm);border:1px solid var(--glass-border);">
+                        <span style="font-size:1.3rem;">3&#65039;&#8419;</span>
+                        <span style="font-size:0.9rem;">Comparte el SharePoint del curso con tu equipo.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="note">&#127908; Tip: termina con "si solo recuerdas 3 cosas..." y mencionalas.</div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-brand">&#9889; Curso Power Automate Web</div>
+                    <div class="footer-text" style="margin-top:4px;">Landing Interactiva &mdash; Enel 2026</div>
+                </div>
+                <div class="footer-text">ICT Colombia &amp; Centro America</div>
+            </div>
+            <div style="text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid var(--glass-border);">
+                <p class="footer-text">Material de apoyo interactivo &bull; Paleta corporativa Enel</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar" id="controlsBar">
+        <button class="ctrl-btn" id="toggleFac" role="button" aria-pressed="false" aria-label="Modo facilitador">&#127908; Facilitador</button>
+        <button class="ctrl-btn" id="toggleSearch" role="button" aria-label="Buscar contenido">&#128269; Buscar</button>
     </div>
-  </div>
 
-  <script>
-    const nav = [
-      {id:'agenda', label:'Agenda'},
-      {id:'objetivos', label:'Objetivos'},
-      {id:'tipos', label:'Tipos de flujos'},
-      {id:'triggers', label:'Triggers y conectores'},
-      {id:'labs', label:'Laboratorios'},
-      {id:'ai', label:'AI Hub / AI Builder'},
-      {id:'gobierno', label:'Gobierno'},
-      {id:'sap', label:'SAP Scripts'},
-      {id:'asistencia', label:'Asistencia + QR'},
-      {id:'cierre', label:'Cierre'},
-    ];
-    const navlist = document.getElementById('navlist');
-    nav.forEach(item=>{
-      const a = document.createElement('a');
-      a.href = '#'+item.id;
-      a.className = 'navitem';
-      a.innerHTML = '<span>'+item.label+'</span><span style="color:var(--muted)">↵</span>';
-      navlist.appendChild(a);
-    });
+    <!-- Search overlay -->
+    <div id="searchOverlay" class="hide" style="position:fixed;inset:0;z-index:1100;background:rgba(10,12,20,0.92);backdrop-filter:blur(12px);display:flex;align-items:flex-start;justify-content:center;padding-top:120px;">
+        <div style="width:100%;max-width:500px;padding:0 24px;">
+            <input id="q" type="text" placeholder="Buscar en el contenido (ej: SharePoint, AI Builder, triggers)..." style="width:100%;padding:16px 24px;border-radius:50px;border:1px solid var(--glass-border);background:var(--dark-card);color:var(--text);font-size:1rem;font-family:var(--font);outline:none;" aria-label="Buscar en el contenido del curso">
+            <p style="text-align:center;color:var(--text-muted);font-size:0.8rem;margin-top:12px;">Presiona Escape para cerrar</p>
+        </div>
+    </div>
 
-    const navItems = Array.from(document.querySelectorAll('.navitem'));
-    const sections = nav.map(n=>document.getElementById(n.id));
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){
-          navItems.forEach(x=>x.classList.remove('active'));
-          const idx = sections.indexOf(e.target);
-          if(idx>=0) navItems[idx].classList.add('active');
+    <script>
+        // Navbar scroll
+        const navbar = document.getElementById('navbar');
+        const scrollProgress = document.getElementById('scrollProgress');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = scrollPercent + '%';
+            navbar.classList.toggle('scrolled', scrollTop > 50);
+        });
+
+        // Mobile nav
+        document.getElementById('navToggle').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+        });
+
+        // Scroll reveal
+        const revealElements = document.querySelectorAll('.reveal, .timeline-item');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Counter animation
+        const counters = document.querySelectorAll('[data-count]');
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = +entry.target.dataset.count;
+                    let current = 0;
+                    const increment = target / 30;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) { entry.target.textContent = target; clearInterval(timer); }
+                        else { entry.target.textContent = Math.ceil(current); }
+                    }, 40);
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        counters.forEach(c => counterObserver.observe(c));
+
+        // Active nav link
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY + 100;
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                const link = document.querySelector('.nav-links a[href="#' + id + '"]');
+                if (link) link.classList.toggle('active', scrollY >= top && scrollY < top + height);
+            });
+        });
+
+        // Facilitator mode
+        const toggleFac = document.getElementById('toggleFac');
+        toggleFac.addEventListener('click', () => {
+            document.body.classList.toggle('facilitator');
+            toggleFac.classList.toggle('active');
+            toggleFac.setAttribute('aria-pressed', document.body.classList.contains('facilitator'));
+        });
+
+        // Search
+        const toggleSearch = document.getElementById('toggleSearch');
+        const searchOverlay = document.getElementById('searchOverlay');
+        const searchInput = document.getElementById('q');
+
+        toggleSearch.addEventListener('click', () => {
+            searchOverlay.classList.toggle('hide');
+            if (!searchOverlay.classList.contains('hide')) searchInput.focus();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !searchOverlay.classList.contains('hide')) {
+                searchOverlay.classList.add('hide');
+                searchInput.value = '';
+                filterSections('');
+            }
+        });
+        searchInput.addEventListener('input', () => filterSections(searchInput.value));
+
+        function filterSections(term) {
+            term = term.trim().toLowerCase();
+            sections.forEach(sec => {
+                const hit = sec.innerText.toLowerCase().includes(term);
+                sec.classList.toggle('hide', term && !hit);
+            });
         }
-      });
-    }, {rootMargin: '-40% 0px -55% 0px', threshold: 0.01});
-    sections.forEach(s=>io.observe(s));
 
-    const toggleTheme = document.getElementById('toggleTheme');
-    const toggleFac = document.getElementById('toggleFac');
-    const toggleFocus = document.getElementById('toggleFocus');
+        // Timer
+        const total = 3 * 60 * 60;
+        let t0 = null, raf = null;
+        const pbar = document.getElementById('pbar');
+        const tlabel = document.getElementById('tlabel');
+        const pctLabel = document.getElementById('pctLabel');
 
-    toggleTheme.addEventListener('click', ()=>document.body.classList.toggle('light'));
-    toggleTheme.addEventListener('keydown', e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleTheme.click();}});
+        function fmt(s) {
+            const hh = String(Math.floor(s / 3600)).padStart(2, '0');
+            const mm = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+            const ss = String(Math.floor(s % 60)).padStart(2, '0');
+            return hh + ':' + mm + ':' + ss;
+        }
 
-    toggleFac.addEventListener('click', ()=>{
-      document.body.classList.toggle('facilitator');
-      toggleFac.setAttribute('aria-pressed', document.body.classList.contains('facilitator'));
-    });
-    toggleFac.addEventListener('keydown', e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleFac.click();}});
+        function tick() {
+            const elapsed = Math.max(0, Math.floor((Date.now() - t0) / 1000));
+            const pct = Math.min(100, (elapsed / total) * 100);
+            pbar.style.width = pct + '%';
+            pbar.parentElement.setAttribute('aria-valuenow', Math.round(pct));
+            tlabel.textContent = fmt(elapsed);
+            pctLabel.textContent = pct.toFixed(0) + '% completado';
+            raf = requestAnimationFrame(tick);
+        }
 
-    toggleFocus.addEventListener('click', ()=>{
-      const sidenav = document.getElementById('sidenav');
-      sidenav.classList.toggle('hide');
-      toggleFocus.setAttribute('aria-pressed', sidenav.classList.contains('hide'));
-    });
-    toggleFocus.addEventListener('keydown', e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleFocus.click();}});
-
-    const q = document.getElementById('q');
-    q.addEventListener('input', ()=>{
-      const term = q.value.trim().toLowerCase();
-      sections.forEach((sec, i)=>{
-        const hit = sec.innerText.toLowerCase().includes(term);
-        sec.classList.toggle('hide', term && !hit);
-        navItems[i].classList.toggle('hide', term && !hit);
-      });
-    });
-
-    const total = 3*60*60;
-    let t0 = null;
-    let raf = null;
-    const pbar = document.getElementById('pbar');
-    const tlabel = document.getElementById('tlabel');
-
-    function fmt(s){
-      const hh = String(Math.floor(s/3600)).padStart(2,'0');
-      const mm = String(Math.floor((s%3600)/60)).padStart(2,'0');
-      const ss = String(Math.floor(s%60)).padStart(2,'0');
-      return hh+':'+mm+':'+ss;
-    }
-
-    function tick(){
-      const now = Date.now();
-      const elapsed = Math.max(0, Math.floor((now - t0)/1000));
-      const pct = Math.min(100, (elapsed/total)*100);
-      pbar.style.width = pct+'%';
-      pbar.parentElement.setAttribute('aria-valuenow', Math.round(pct));
-      tlabel.textContent = fmt(elapsed)+' • '+pct.toFixed(0)+'% completado';
-      raf = requestAnimationFrame(tick);
-    }
-
-    document.getElementById('startTimer').addEventListener('click', ()=>{
-      if(!t0){
-        t0 = Date.now();
-        if(raf) cancelAnimationFrame(raf);
-        tick();
-      }
-    });
-
-    document.getElementById('resetTimer').addEventListener('click', ()=>{
-      t0 = null;
-      if(raf) cancelAnimationFrame(raf);
-      pbar.style.width = '0%';
-      tlabel.textContent = '00:00:00 • 0% completado';
-    });
-  </script>
+        document.getElementById('startTimer').addEventListener('click', () => {
+            if (!t0) { t0 = Date.now(); if (raf) cancelAnimationFrame(raf); tick(); }
+        });
+        document.getElementById('resetTimer').addEventListener('click', () => {
+            t0 = null; if (raf) cancelAnimationFrame(raf);
+            pbar.style.width = '0%';
+            tlabel.textContent = '00:00:00';
+            pctLabel.textContent = '0% completado';
+        });
+    </script>
 </body>
 </html>
