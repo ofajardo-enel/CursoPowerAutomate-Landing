@@ -178,6 +178,11 @@
         .checklist label:hover { border-color: var(--primary-light); }
         .checklist input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--enel-blue); }
 
+        .poll-option { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); font-size: 0.88rem; cursor: pointer; transition: var(--transition); }
+        .poll-option:hover { border-color: var(--primary-light); background: rgba(5,85,250,0.06); }
+        .poll-option input[type="radio"] { width: 18px; height: 18px; accent-color: var(--enel-blue); }
+        .poll-option.selected { border-color: var(--primary-light); background: rgba(5,85,250,0.1); }
+
         .footer { position: relative; z-index: 1; padding: 60px 0 30px; border-top: 1px solid var(--glass-border); }
         .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
         .footer-brand { font-weight: 800; font-size: 1.1rem; }
@@ -221,6 +226,7 @@
             <a href="#hero" class="nav-logo">⚡ Power Automate</a>
             <div class="nav-links" id="navLinks">
                 <a href="#agenda">Agenda</a>
+                <a href="#icebreaker">Icebreaker</a>
                 <a href="#objetivos">Objetivos</a>
                 <a href="#tipos">Flujos</a>
                 <a href="#triggers">Triggers</a>
@@ -335,6 +341,60 @@
                 <div class="timer-btns">
                     <button class="btn btn-primary" id="startTimer" style="padding:10px 20px;font-size:0.85rem;">&#9654; Iniciar</button>
                     <button class="btn btn-outline" id="resetTimer" style="padding:10px 20px;font-size:0.85rem;">&#128257; Reiniciar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ICEBREAKER POLL -->
+    <section id="icebreaker">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">&#10052;&#65039; Rompe el hielo</span>
+                <h2>Cuestionario Inicial</h2>
+                <p>Conoce a tu audiencia antes de arrancar — resultados en tiempo real</p>
+            </div>
+            <div class="reveal" style="max-width:700px;margin:0 auto;display:grid;gap:24px;">
+                <!-- Q1 -->
+                <div style="background:var(--dark-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:28px;">
+                    <h3 style="font-size:1rem;margin-bottom:16px;"><span style="background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;">Q1</span> &nbsp;¿Qué nivel de experiencia tienes con herramientas de automatización como Power Automate?</h3>
+                    <div style="display:grid;gap:10px;">
+                        <label class="poll-option"><input type="radio" name="q1" value="1"><span>Nunca he utilizado ninguna herramienta de automatización</span></label>
+                        <label class="poll-option"><input type="radio" name="q1" value="2"><span>He usado alguna herramienta básica (ej. Excel, macros)</span></label>
+                        <label class="poll-option"><input type="radio" name="q1" value="3"><span>Tengo experiencia con Power Automate u otras plataformas similares</span></label>
+                        <label class="poll-option"><input type="radio" name="q1" value="4"><span>Soy experto/a en automatización de procesos</span></label>
+                    </div>
+                </div>
+                <!-- Q2 -->
+                <div style="background:var(--dark-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:28px;">
+                    <h3 style="font-size:1rem;margin-bottom:16px;"><span style="background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;">Q2</span> &nbsp;¿Con qué aplicaciones integras más frecuentemente tus procesos diarios?</h3>
+                    <div style="display:grid;gap:10px;">
+                        <label class="poll-option"><input type="radio" name="q2" value="1"><span>Outlook y correo electrónico</span></label>
+                        <label class="poll-option"><input type="radio" name="q2" value="2"><span>SharePoint y gestión documental</span></label>
+                        <label class="poll-option"><input type="radio" name="q2" value="3"><span>Microsoft Teams y colaboración</span></label>
+                        <label class="poll-option"><input type="radio" name="q2" value="4"><span>SAP y sistemas de gestión empresarial</span></label>
+                    </div>
+                </div>
+                <!-- Q3 -->
+                <div style="background:var(--dark-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:28px;">
+                    <h3 style="font-size:1rem;margin-bottom:16px;"><span style="background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;">Q3</span> &nbsp;¿Qué te gustaría lograr tras esta capacitación?</h3>
+                    <div style="display:grid;gap:10px;">
+                        <label class="poll-option"><input type="radio" name="q3" value="1"><span>Aprender a crear flujos básicos de automatización</span></label>
+                        <label class="poll-option"><input type="radio" name="q3" value="2"><span>Integrar Power Automate con otras aplicaciones</span></label>
+                        <label class="poll-option"><input type="radio" name="q3" value="3"><span>Automatizar reportes y tareas en SAP</span></label>
+                        <label class="poll-option"><input type="radio" name="q3" value="4"><span>Descubrir cómo aplicar inteligencia artificial en mis procesos</span></label>
+                    </div>
+                </div>
+            </div>
+            <!-- Results summary -->
+            <div class="reveal" style="max-width:700px;margin:24px auto 0;">
+                <div style="background:var(--dark-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;text-align:center;">
+                    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">Resumen de respuestas del grupo</p>
+                    <div id="pollResults" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+                        <div><div style="font-size:1.8rem;font-weight:800;color:var(--accent);" id="pollCount">0</div><small style="color:var(--text-muted);">Respuestas</small></div>
+                        <div><div style="font-size:1.8rem;font-weight:800;color:var(--primary-light);" id="pollTopLevel">—</div><small style="color:var(--text-muted);">Nivel predominante</small></div>
+                        <div><div style="font-size:1.8rem;font-weight:800;color:var(--enel-orange);" id="pollTopGoal">—</div><small style="color:var(--text-muted);">Meta principal</small></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -844,6 +904,28 @@
             tlabel.textContent = '00:00:00';
             pctLabel.textContent = '0% completado';
         });
+
+        // Icebreaker poll
+        (function() {
+            const levels = ['—','Principiante','Básico','Intermedio','Experto'];
+            const goals = ['—','Flujos básicos','Integrar apps','SAP','IA'];
+            let answers = { q1: [], q2: [], q3: [] };
+            document.querySelectorAll('.poll-option input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const name = this.name;
+                    const val = parseInt(this.value);
+                    // Highlight selected
+                    this.closest('[style*="display:grid"]').querySelectorAll('.poll-option').forEach(o => o.classList.remove('selected'));
+                    this.closest('.poll-option').classList.add('selected');
+                    // Track (simple local count)
+                    answers[name] = [val];
+                    const totalAnswered = Object.values(answers).filter(a => a.length > 0).length;
+                    document.getElementById('pollCount').textContent = totalAnswered;
+                    if (answers.q1.length) document.getElementById('pollTopLevel').textContent = levels[answers.q1[0]];
+                    if (answers.q3.length) document.getElementById('pollTopGoal').textContent = goals[answers.q3[0]];
+                });
+            });
+        })();
 
         // Timer Gobierno (20 min)
         const gobTotal = 20 * 60;
