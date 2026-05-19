@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Curso Power Automate Web - Landing interactiva</title>
+  <style>
+    :root{
+      --enel-red: #e61400;
+      --enel-blue: #0555fa;
+      --enel-green: #008c5a;
+      --enel-orange: #ff5a0f;
+      --enel-magenta: #ff0f64;
+      --enel-lightblue: #41b9e6;
+      --enel-pink: #ff4687;
+      --enel-greenlight: #55be5a;
+      --bg: #0b0d12;
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --line: rgba(255,255,255,.14);
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+      --font: Arial, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+    }
+
+    body.light{
+      --bg: #f7f7fb;
+      --text: rgba(0,0,0,.88);
+      --muted: rgba(0,0,0,.64);
+      --line: rgba(0,0,0,.10);
+      --shadow: 0 18px 60px rgba(0,0,0,.15);
+    }
+
+    html, body{height:100%;}
+    body{
+      margin:0;
+      font-family: var(--font);
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(5,85,250,.24), transparent 60%),
+                  radial-gradient(900px 700px at 85% 15%, rgba(230,20,0,.22), transparent 55%),
+                  radial-gradient(900px 800px at 70% 85%, rgba(0,140,90,.22), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit; text-decoration:none;}
+
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(to bottom, rgba(11,13,18,.78), rgba(11,13,18,.40));
+      border-bottom: 1px solid var(--line);
+    }
+    body.light .topbar{background: linear-gradient(to bottom, rgba(247,247,251,.86), rgba(247,247,251,.55));}
+
+    .topbar-inner{
+      max-width: 1200px; margin:0 auto; padding: 12px 16px;
+      display:flex; align-items:center; gap:12px; justify-content:space-between;
+    }
+
+    .brand{display:flex; align-items:center; gap:10px; min-width: 260px;}
+    .dot{width:12px;height:12px;border-radius:999px;background: conic-gradient(from 180deg, var(--enel-red), var(--enel-orange), var(--enel-greenlight), var(--enel-green), var(--enel-blue), var(--enel-magenta)); box-shadow:0 0 0 6px rgba(255,255,255,.07);}
+    .brand h1{font-size:14px; margin:0; letter-spacing:.2px;}
+    .brand p{margin:0; font-size:12px; color:var(--muted);}
+
+    .controls{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      cursor:pointer; user-select:none;
+      font-size: 12px; color: var(--text);
+    }
+    body.light .chip{background: rgba(0,0,0,.03);}
+
+    .wrap{max-width:1200px; margin: 0 auto; padding: 18px 16px 80px;}
+
+    .hero{
+      display:grid; grid-template-columns: 1.2fr .8fr;
+      gap:18px; align-items:stretch;
+      margin-top: 18px;
+    }
+    @media (max-width: 900px){
+      .hero{grid-template-columns: 1fr;}
+      .brand{min-width:unset;}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow:hidden;
+    }
+    body.light .card{background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.75));}
+
+    .hero-left{padding: 22px 22px 18px; position:relative;}
+    .kicker{display:flex; align-items:center; gap:10px; color: var(--muted); font-size: 12px; flex-wrap:wrap;}
+    .badge{padding: 4px 10px; border-radius: 999px; border:1px solid var(--line); background: rgba(0,0,0,.12);}
+    body.light .badge{background: rgba(255,255,255,.7);}
+
+    .title{font-size: 34px; line-height:1.05; margin: 12px 0 8px; letter-spacing:-.6px;}
+    .subtitle{margin:0; color: var(--muted); font-size: 14px; line-height: 1.5; max-width: 64ch;}
+
+    .cta{display:flex; gap:10px; flex-wrap:wrap; margin-top: 14px;}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 12px; border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      cursor:pointer; font-size: 13px; font-weight: 600;
+    }
+    .btn.primary{
+      background: linear-gradient(90deg, var(--enel-red), var(--enel-orange));
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 18px 50px rgba(230,20,0,.22);
+    }
+    .btn.secondary{background: linear-gradient(90deg, rgba(5,85,250,.26), rgba(65,185,230,.18));}
+
+    .hero-right{display:grid; grid-template-rows: auto 1fr;}
+    .stats{padding: 16px 16px 12px; display:grid; gap:10px;}
+    .stat{padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.06); display:flex; justify-content:space-between; align-items:center; gap:10px;}
+    body.light .stat{background: rgba(0,0,0,.03);}
+    .stat b{font-size: 13px;}
+    .stat span{color: var(--muted); font-size: 12px;}
+
+    .timer{padding: 14px 16px 18px; border-top: 1px solid var(--line);}
+    .timer-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+    .timer h3{margin:0; font-size: 13px;}
+    .timer small{color: var(--muted);}
+    .progress{height:10px; border-radius:999px; background: rgba(255,255,255,.10); border:1px solid var(--line); overflow:hidden; margin-top:10px;}
+    .progress > div{height:100%; width:0%; background: linear-gradient(90deg, var(--enel-blue), var(--enel-lightblue), var(--enel-greenlight));}
+
+    .layout{display:grid; grid-template-columns: 280px 1fr; gap: 16px; margin-top: 18px;}
+    @media (max-width: 980px){.layout{grid-template-columns: 1fr;} .sidenav{position:relative; top:auto;}}
+
+    .sidenav{position: sticky; top: 68px; align-self:start; padding: 12px;}
+    .navlist{display:grid; gap:8px;}
+    .navitem{padding: 10px 10px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.05); display:flex; justify-content:space-between; align-items:center; font-size: 13px;}
+    body.light .navitem{background: rgba(0,0,0,.03);}
+    .navitem.active{outline: 2px solid rgba(5,85,250,.35);}
+
+    .main{display:grid; gap: 16px;}
+    section{scroll-margin-top: 92px;}
+    .section{padding: 18px 18px 10px;}
+    .section h2{margin:0 0 6px; font-size: 18px;}
+    .section p{margin:0 0 12px; color: var(--muted); line-height: 1.6;}
+
+    .grid{display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px;}
+    @media (max-width: 900px){.grid{grid-template-columns: 1fr;}}
+
+    .tile{padding: 14px; border-radius: 16px; border: 1px solid var(--line); background: rgba(255,255,255,.05);}
+    body.light .tile{background: rgba(0,0,0,.03);}
+    .tile h3{margin:0 0 6px; font-size: 14px;}
+    .tile p{margin:0; color: var(--muted); font-size: 12px; line-height:1.5;}
+
+    details{border:1px solid var(--line); border-radius:16px; background: rgba(255,255,255,.05); padding: 10px 12px;}
+    body.light details{background: rgba(0,0,0,.03);}
+    details + details{margin-top: 10px;}
+    summary{cursor:pointer; list-style:none; font-weight:700; font-size: 13px;}
+    summary::-webkit-details-marker{display:none;}
+    .steps{margin: 10px 0 0; padding-left: 18px; color: var(--muted); line-height: 1.6; font-size: 13px;}
+
+    .note{border-left: 3px solid var(--enel-orange); padding: 10px 12px; background: rgba(255,90,15,.12); border-radius: 12px; margin: 10px 0 0; font-size: 13px; display:none;}
+    body.facilitator .note{display:block;}
+
+    .qrgrid{display:grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items:center;}
+    @media (max-width: 700px){.qrgrid{grid-template-columns: 1fr;}}
+    .qr{display:flex; gap: 12px; align-items:center;}
+    .qr img{width: 96px; height: 96px; border-radius: 12px; border:1px solid var(--line); background:white;}
+
+    .search{width: 100%; padding: 10px 12px; border-radius: 12px; border:1px solid var(--line); background: rgba(255,255,255,.06); color: var(--text); outline:none; font-size: 13px;}
+    body.light .search{background: rgba(0,0,0,.03);}
+
+    .tag{font-size: 11px; color: var(--muted); border:1px solid var(--line); padding: 3px 8px; border-radius:999px;}
+
+    .img-hero{position:absolute; right:-40px; top:-40px; width: 240px; height: 240px; background: conic-gradient(from 180deg, rgba(230,20,0,.55), rgba(255,90,15,.45), rgba(85,190,90,.45), rgba(0,140,90,.45), rgba(5,85,250,.45), rgba(255,15,100,.45)); filter: blur(24px); opacity: .35; border-radius: 999px; pointer-events:none;}
+
+    .footer{margin-top: 18px; padding: 16px 18px; color: var(--muted); font-size: 12px;}
+    .hide{display:none !important;}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" title="Landing interactiva del curso">
+        <div class="dot"></div>
+        <div>
+          <h1>Curso Power Automate Web</h1>
+          <p>Landing interactiva • sesión virtual (3h)</p>
+        </div>
+      </div>
+      <div class="controls">
+        <input id="q" class="search" placeholder="Buscar en el contenido (ej: SharePoint, AI Builder, triggers)…" aria-label="Buscar en el contenido del curso" />
+        <div class="chip" id="toggleFac" role="button" tabindex="0" aria-pressed="false" aria-label="Activar modo facilitador">🎤 Modo facilitador</div>
+        <div class="chip" id="toggleTheme" role="button" tabindex="0" aria-label="Cambiar tema claro/oscuro">🌓 Tema</div>
+        <div class="chip" id="toggleFocus" role="button" tabindex="0" aria-pressed="false" aria-label="Activar modo enfoque">🧘 Enfoque</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <div class="card hero-left">
+        <div class="img-hero"></div>
+        <div class="kicker">
+          <span class="badge">Power Automate • SharePoint • AI Hub/AI Builder • SAP Scripts</span>
+          <span class="tag">Material de apoyo interactivo</span>
+        </div>
+        <h2 class="title">De la idea a la automatización</h2>
+        <p class="subtitle">Curso práctico para optimizar procesos empresariales digitales. Navega por módulos, abre laboratorios con paso a paso, registra asistencia y usa enlaces directos durante la sesión.</p>
+
+        <div class="cta">
+          <a class="btn primary" href="https://make.powerautomate.com" target="_blank" rel="noreferrer">⚡ Abrir Power Automate</a>
+          <a class="btn secondary" href="https://enelcom.sharepoint.com/sites/CursoPowerAutomate" target="_blank" rel="noreferrer">📚 Abrir SharePoint del curso</a>
+          <button class="btn" id="startTimer">⏱️ Iniciar cronómetro 3h</button>
+          <button class="btn" id="resetTimer">🔁 Reiniciar</button>
+        </div>
+
+        <div class="note">💡 <b>Tips de facilitación</b>: usa <b>Modo facilitador</b> para ver guiones rápidos por sección. En <b>Enfoque</b> ocultas la barra lateral para proyectar contenido limpio.</div>
+      </div>
+
+      <div class="card hero-right">
+        <div class="stats">
+          <div class="stat"><b>Duración</b><span>3 horas (virtual)</span></div>
+          <div class="stat"><b>Enfoque</b><span>Hands-on + buenas prácticas + SAP</span></div>
+          <div class="stat"><b>Recursos</b><span>Power Automate + SharePoint + QR asistencia</span></div>
+        </div>
+        <div class="timer">
+          <div class="timer-row">
+            <h3>Cronómetro de sesión</h3>
+            <small id="tlabel" aria-live="polite" aria-atomic="true">00:00:00 • 0% completado</small>
+          </div>
+          <div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso de la sesión"><div id="pbar"></div></div>
+          <div class="note">🧭 <b>Agenda sugerida 3h</b>: ajusta el ritmo con el cronómetro. Puedes marcar laboratorios como “hecho” abajo y volver rápido desde el menú lateral.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout" id="layout">
+      <aside class="card sidenav" id="sidenav" aria-label="Navegación del curso">
+        <div style="padding:14px 14px 10px">
+          <h3 style="margin:0 0 8px;font-size:14px">Navegación</h3>
+          <p style="margin:0;color:var(--muted);font-size:12px;line-height:1.5">Haz clic para saltar. La búsqueda filtra secciones.</p>
+        </div>
+        <nav class="navlist" id="navlist" style="padding: 0 12px 12px" aria-label="Secciones del curso"></nav>
+      </aside>
+
+      <main class="main" id="main">
+
+        <section id="agenda" class="card section">
+          <h2>Agenda (temario)</h2>
+          <p>Basado en el temario del curso original (Power Automate, triggers/conectores, laboratorios con SharePoint, AI Hub/AI Builder, gobierno, scripts SAP y cierre). Ajustado para sesión virtual de 3h.</p>
+          <div class="grid">
+            <div class="tile"><h3>1) Bienvenida + objetivos</h3><p>Contexto del curso y qué construirás durante la sesión.</p></div>
+            <div class="tile"><h3>2) Tipos de flujos</h3><p>Automatizados, instantáneos y programados (cuándo usar cada uno).</p></div>
+            <div class="tile"><h3>3) Triggers y conectores</h3><p>Disparadores, conectores, filtros y ejemplos comunes.</p></div>
+            <div class="tile"><h3>4) Laboratorios con SharePoint</h3><p>4 laboratorios guiados con paso a paso expandible.</p></div>
+            <div class="tile"><h3>5) AI Hub / AI Builder</h3><p>Introducción y laboratorio de extracción de texto (PDF/imagen).</p></div>
+            <div class="tile"><h3>6) Gobierno + SAP Scripts</h3><p>Buenas prácticas, continuidad, documentación e introducción a scripts SAP.</p></div>
+          </div>
+          <div class="note">🎤 <b>Guion rápido</b>: abre con “¿qué proceso repetitivo te quita más tiempo?” y conecta la respuesta con el módulo de flujos + el laboratorio que más les aplique.</div>
+        </section>
+
+        <section id="objetivos" class="card section">
+          <h2>Bienvenida y objetivos</h2>
+          <p>Power Automate permite automatizar tareas y procesos repetitivos conectando diferentes aplicaciones y servicios, aumentando productividad y estandarización.</p>
+          <details open>
+            <summary>✅ Objetivo principal</summary>
+            <ul class="steps"><li>Automatizar tareas y procesos repetitivos dentro de una organización.</li><li>Conectar apps/servicios (Microsoft 365 y otros) para flujos end-to-end.</li></ul>
+          </details>
+          <details>
+            <summary>🧩 ¿Qué es Power Automate?</summary>
+            <ul class="steps"><li>Herramienta para automatizar flujos repetitivos.</li><li>Integra apps como Outlook, Teams y SharePoint.</li><li>Soporta usuarios de negocio y desarrolladores.</li></ul>
+          </details>
+          <div class="note">🎤 <b>Guion rápido</b>: pide 2 ejemplos de aprobaciones (contratos, compras, permisos) y anota cuáles conectores usarían.</div>
+        </section>
+
+        <section id="tipos" class="card section">
+          <h2>Tipos de flujos (Power Automate)</h2>
+          <p>En el curso se trabajan tres categorías: automatizados, instantáneos y programados.</p>
+          <div class="grid">
+            <div class="tile"><h3>Automatizados</h3><p>Se activan por un evento (ej. “cuando se cree un ítem”).</p></div>
+            <div class="tile"><h3>Instantáneos</h3><p>Se ejecutan manualmente por botón (ideal para “alta rápida”).</p></div>
+            <div class="tile"><h3>Programados</h3><p>Se corren por horario/intervalo (recordatorios, rutinas).</p></div>
+          </div>
+          <details>
+            <summary>🧠 Regla práctica (sugerida)</summary>
+            <ul class="steps"><li><b>Evento</b> → Automatizado.</li><li><b>Usuario dispara</b> → Instantáneo.</li><li><b>Reloj</b> → Programado.</li></ul>
+          </details>
+          <div class="note">🎤 <b>Guion rápido</b>: muestra 1 ejemplo por tipo y pregunta: “¿qué pasaría si lo hicieras con el tipo equivocado?”</div>
+        </section>
+
+        <section id="triggers" class="card section">
+          <h2>Triggers y conectores</h2>
+          <p>Los <b>triggers</b> (disparadores) inician flujos y los <b>conectores</b> enlazan aplicaciones (Outlook, Teams, SharePoint, etc.).</p>
+          <details open>
+            <summary>🔔 Triggers (disparadores)</summary>
+            <ul class="steps"><li>Inician el flujo cuando ocurre un evento (creación/modificación, llegada de email, etc.).</li><li>Buenas prácticas: filtrar temprano para evitar ejecuciones innecesarias.</li></ul>
+          </details>
+          <details>
+            <summary>🔌 Conectores</summary>
+            <ul class="steps"><li>Conectan servicios: Microsoft 365, SharePoint, Teams, Excel Online, Power BI, etc.</li><li>Define permisos (cuentas/conexiones) y alcance de datos.</li></ul>
+          </details>
+          <details>
+            <summary>🧪 Mini-demo sugerida (5 min)</summary>
+            <ul class="steps"><li>“When an item is created” (SharePoint) → “Send an email” (Outlook).</li><li>Agrega condición por “Estado = Pendiente”.</li></ul>
+          </details>
+          <div class="note">🎤 <b>Guion rápido</b>: recalca “trigger correcto + filtro temprano = menos ruido + mejor performance”.</div>
+        </section>
+
+        <section id="labs" class="card section">
+          <h2>Laboratorios prácticos con SharePoint (paso a paso)</h2>
+          <p>Laboratorios basados en el curso: listas/bibliotecas, aprobaciones, recordatorios desde Excel Online y actualización de dataset Power BI.</p>
+
+          <details open>
+            <summary>🧪 Lab 1 — Alta de registros en lista + adjuntos + notificación</summary>
+            <ul class="steps">
+              <li>Crear lista en SharePoint (columnas: Título, Estado, Responsable, Fecha límite).</li>
+              <li>En Power Automate: crear <b>Automated cloud flow</b> con trigger “When an item is created”.</li>
+              <li>Acción: “Get attachments” + “Get attachment content”.</li>
+              <li>Guardar adjuntos en biblioteca (acción “Create file”).</li>
+              <li>Enviar email/Teams con link al ítem y a la carpeta del documento.</li>
+              <li>Agregar control de errores: scope “Try/Catch” (sugerido).</li>
+            </ul>
+            <div class="note">🎤 Tip: pide que 1 participante cree un ítem y otro valide que le llegó la notificación.</div>
+          </details>
+
+          <details>
+            <summary>🧪 Lab 2 — Aprobación de documentos en biblioteca</summary>
+            <ul class="steps">
+              <li>Crear biblioteca “Contratos” (metadatos: Área, Monto, Estado).</li>
+              <li>Flow automatizado: trigger “When a file is created (properties only)”.</li>
+              <li>Acción “Start and wait for an approval”.</li>
+              <li>Si aprueba: actualizar metadato Estado=“Aprobado” y mover a carpeta “Aprobados”.</li>
+              <li>Si rechaza: Estado=“Rechazado” + notificar al autor con comentarios.</li>
+            </ul>
+            <div class="note">🎤 Tip: muestra la tarjeta de aprobación en Teams/Outlook y cómo queda el audit trail.</div>
+          </details>
+
+          <details>
+            <summary>🧪 Lab 3 — Recordatorios programados de vencimientos (Excel Online)</summary>
+            <ul class="steps">
+              <li>En SharePoint: archivo Excel “Contratos.xlsx” con columnas: Contrato, Responsable, Vence, Email.</li>
+              <li>Flow <b>Scheduled</b>: diario (o cada X horas).</li>
+              <li>Acción “List rows present in a table”.</li>
+              <li>Filtrar vencimientos (ej. hoy+7 días) y enviar recordatorio.</li>
+              <li>Opcional: escribir una columna “Último aviso” para evitar duplicados.</li>
+            </ul>
+            <div class="note">🎤 Tip: enseña filtro OData vs condición y por qué OData reduce carga.</div>
+          </details>
+
+          <details>
+            <summary>🧪 Lab 4 — Actualizar dataset de Power BI</summary>
+            <ul class="steps">
+              <li>Pre-requisito: dataset publicado en Power BI con refresh habilitado.</li>
+              <li>Flow instantáneo o programado (según caso).</li>
+              <li>Acción Power BI: “Refresh a dataset”.</li>
+              <li>Notificar resultado al canal de Teams (éxito/error).</li>
+              <li>Opcional: registrar ejecución en una lista “Ejecuciones” (SharePoint).</li>
+            </ul>
+            <div class="note">🎤 Tip: conecta esto con gobierno: inventario de flujos + logging.</div>
+          </details>
+
+        </section>
+
+        <section id="ai" class="card section">
+          <h2>Módulo AI Hub y AI Builder</h2>
+          <p>Se introduce el módulo AI Hub y AI Builder para integrar modelos de IA en flujos; incluye un laboratorio para capturar textos de PDFs o imágenes.</p>
+          <details open>
+            <summary>🤖 ¿Qué veremos?</summary>
+            <ul class="steps"><li>Dónde encontrar AI Hub en Power Automate.</li><li>Modelos preconstruidos vs personalizados.</li><li>Lab: extracción de texto (PDF/imagen) y envío a SharePoint/Teams.</li></ul>
+          </details>
+          <details>
+            <summary>🧪 Lab sugerido — Extraer texto y crear registro</summary>
+            <ul class="steps"><li>Trigger: manual (Instant flow) con carga de archivo.</li><li>Acción AI Builder: OCR / extracción.</li><li>Guardar resultado en lista (campo “Texto extraído”).</li></ul>
+          </details>
+          <div class="note">🎤 Tip: cierra con un ejemplo real (actas, facturas, contratos) y menciona consideraciones de datos.</div>
+        </section>
+
+        <section id="gobierno" class="card section">
+          <h2>Gobierno y buenas prácticas</h2>
+          <p>El curso incluye recomendaciones como compartir flujos, documentar técnicamente, y llevar inventario de flujos.</p>
+          <details open>
+            <summary>🧭 Checklist de buenas prácticas</summary>
+            <ul class="steps">
+              <li><input type="checkbox"/> Compartir flujos para evitar único propietario.</li>
+              <li><input type="checkbox"/> Documentación técnica (paso a paso).</li>
+              <li><input type="checkbox"/> Inventario simple de flujos (Excel o lista).</li>
+              <li><input type="checkbox"/> Uso de ambientes/soluciones (sugerido) para control.</li>
+              <li><input type="checkbox"/> Versionado y registro de cambios.</li>
+            </ul>
+          </details>
+          <div class="note">🎤 Tip: pide que elijan 1 práctica para adoptar “desde mañana”.</div>
+        </section>
+
+        <section id="sap" class="card section">
+          <h2>Automatización de reportes SAP mediante Scripts</h2>
+          <p>Se cubre la automatización de reportes SAP usando scripts grabados, con lineamientos para creación y gestión.</p>
+          <details open>
+            <summary>🧩 Conceptos clave</summary>
+            <ul class="steps"><li>Automatización reduce tiempos y errores en generación de reportes.</li><li>Scripts grabados ejecutan tareas repetitivas de forma precisa.</li><li>Lineamientos para gestionar scripts y asegurar consistencia.</li></ul>
+          </details>
+          <div class="note">🎤 Tip: conecta SAP scripts con Power Automate solo a nivel conceptual (orquestación) y cierra con controles de seguridad.</div>
+        </section>
+
+        <section id="asistencia" class="card section">
+          <h2>Registro de asistencia / recursos (QR)</h2>
+          <p>Usa estos QR para abrir rápido los recursos del curso. Si tienes un formulario de asistencia (Microsoft Forms), reemplaza el enlace del botón principal por el del formulario.</p>
+          <div class="qrgrid">
+            <div class="tile">
+              <h3>Recursos del curso</h3>
+              <div class="qr">
+                <img src="assets/qr_sharepoint.png" alt="QR SharePoint" />
+                <div>
+                  <div style="font-weight:700">SharePoint del curso</div>
+                  <div style="color:var(--muted);font-size:12px">https://enelcom.sharepoint.com/sites/CursoPowerAutomate</div>
+                </div>
+              </div>
+              <div style="height:10px"></div>
+              <div class="qr">
+                <img src="assets/qr_power_automate.png" alt="QR Power Automate" />
+                <div>
+                  <div style="font-weight:700">Power Automate</div>
+                  <div style="color:var(--muted);font-size:12px">https://make.powerautomate.com</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tile">
+              <h3>Asistencia (sugerido)</h3>
+              <p style="margin:0 0 10px;color:var(--muted)">Opción rápida: usa un Microsoft Forms o una lista en SharePoint para asistencia.</p>
+              <details open>
+                <summary>📝 Plantilla rápida (en la sesión)</summary>
+                <ul class="steps">
+                  <li>Nombre completo</li>
+                  <li>Área</li>
+                  <li>Correo</li>
+                  <li>¿Qué proceso quiere automatizar?</li>
+                </ul>
+              </details>
+              <div class="note">🎤 Tip: al final, revisa 3 respuestas y elige 1 caso para “próxima automatización”.</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="cierre" class="card section">
+          <h2>Cierre y espacio de preguntas</h2>
+          <p>Repaso de conceptos clave, dudas y próximos pasos para aplicar lo aprendido en procesos reales.</p>
+          <details open>
+            <summary>✅ Cierre (sugerido)</summary>
+            <ul class="steps"><li>Recapitular: tipos de flujos, triggers/conectores, labs, AI, gobierno.</li><li>Pedir 1 compromiso: “automatizaré ____ esta semana”.</li><li>Compartir el repositorio / SharePoint del curso.</li></ul>
+          </details>
+          <div class="note">🎤 Tip: termina con “si solo recuerdas 3 cosas…” y menciónalas.</div>
+        </section>
+
+        <div class="card footer">
+          <div><b>Nota</b>: Esta landing es un material de apoyo interactivo. Puedes editar textos, tiempos y enlaces según el grupo. Incluye paleta corporativa Enel (hex) y tipografía con fallback (Arial) cuando Enel Roobert no esté disponible.</div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const nav = [
+      {id:'agenda', label:'Agenda'},
+      {id:'objetivos', label:'Objetivos'},
+      {id:'tipos', label:'Tipos de flujos'},
+      {id:'triggers', label:'Triggers y conectores'},
+      {id:'labs', label:'Laboratorios'},
+      {id:'ai', label:'AI Hub / AI Builder'},
+      {id:'gobierno', label:'Gobierno'},
+      {id:'sap', label:'SAP Scripts'},
+      {id:'asistencia', label:'Asistencia + QR'},
+      {id:'cierre', label:'Cierre'},
+    ];
+    const navlist = document.getElementById('navlist');
+    nav.forEach(item=>{
+      const a = document.createElement('a');
+      a.href = '#'+item.id;
+      a.className = 'navitem';
+      a.innerHTML = '<span>'+item.label+'</span><span style="color:var(--muted)">↵</span>';
+      navlist.appendChild(a);
+    });
+
+    const navItems = Array.from(document.querySelectorAll('.navitem'));
+    const sections = nav.map(n=>document.getElementById(n.id));
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          navItems.forEach(x=>x.classList.remove('active'));
+          const idx = sections.indexOf(e.target);
+          if(idx>=0) navItems[idx].classList.add('active');
+        }
+      });
+    }, {rootMargin: '-40% 0px -55% 0px', threshold: 0.01});
+    sections.forEach(s=>io.observe(s));
+
+    const toggleTheme = document.getElementById('toggleTheme');
+    const toggleFac = document.getElementById('toggleFac');
+    const toggleFocus = document.getElementById('toggleFocus');
+
+    toggleTheme.addEventListener('click', ()=>document.body.classList.toggle('light'));
+    toggleTheme.addEventListener('keydown', e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleTheme.click();}});
+
+    toggleFac.addEventListener('click', ()=>{
+      document.body.classList.toggle('facilitator');
+      toggleFac.setAttribute('aria-pressed', document.body.classList.contains('facilitator'));
+    });
+    toggleFac.addEventListener('keydown', e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleFac.click();}});
+
+    toggleFocus.addEventListener('click', ()=>{
+      const sidenav = document.getElementById('sidenav');
+      sidenav.classList.toggle('hide');
+      toggleFocus.setAttribute('aria-pressed', sidenav.classList.contains('hide'));
+    });
+    toggleFocus.addEventListener('keydown', e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleFocus.click();}});
+
+    const q = document.getElementById('q');
+    q.addEventListener('input', ()=>{
+      const term = q.value.trim().toLowerCase();
+      sections.forEach((sec, i)=>{
+        const hit = sec.innerText.toLowerCase().includes(term);
+        sec.classList.toggle('hide', term && !hit);
+        navItems[i].classList.toggle('hide', term && !hit);
+      });
+    });
+
+    const total = 3*60*60;
+    let t0 = null;
+    let raf = null;
+    const pbar = document.getElementById('pbar');
+    const tlabel = document.getElementById('tlabel');
+
+    function fmt(s){
+      const hh = String(Math.floor(s/3600)).padStart(2,'0');
+      const mm = String(Math.floor((s%3600)/60)).padStart(2,'0');
+      const ss = String(Math.floor(s%60)).padStart(2,'0');
+      return hh+':'+mm+':'+ss;
+    }
+
+    function tick(){
+      const now = Date.now();
+      const elapsed = Math.max(0, Math.floor((now - t0)/1000));
+      const pct = Math.min(100, (elapsed/total)*100);
+      pbar.style.width = pct+'%';
+      pbar.parentElement.setAttribute('aria-valuenow', Math.round(pct));
+      tlabel.textContent = fmt(elapsed)+' • '+pct.toFixed(0)+'% completado';
+      raf = requestAnimationFrame(tick);
+    }
+
+    document.getElementById('startTimer').addEventListener('click', ()=>{
+      if(!t0){
+        t0 = Date.now();
+        if(raf) cancelAnimationFrame(raf);
+        tick();
+      }
+    });
+
+    document.getElementById('resetTimer').addEventListener('click', ()=>{
+      t0 = null;
+      if(raf) cancelAnimationFrame(raf);
+      pbar.style.width = '0%';
+      tlabel.textContent = '00:00:00 • 0% completado';
+    });
+  </script>
+</body>
+</html>

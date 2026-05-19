@@ -1,0 +1,102 @@
+{
+  "slides": [
+    {
+      "slide": 1,
+      "text": "De la Idea a la Automatización: Curso Práctico de Power Automate y Scripts SAP\nCurso practico para optimizar procesos empresariales digitales\n1"
+    },
+    {
+      "slide": 2,
+      "text": "2"
+    },
+    {
+      "slide": 3,
+      "text": "Temario de la capacitación\nBienvenida y objetivos (10 min)\nTipos de flujos en Power Automate (30 min)\nTriggers y conectores (20 min)\nLaboratorios prácticos con SharePoint (90 min)\nMódulo AI Hub y AI Builder (40 min)\nGobierno y buenas prácticas (20 min) \nScripts SAP (20 min) \nCierre y espacio de preguntas (10 min)\n3\nAgenda"
+    },
+    {
+      "slide": 4,
+      "text": "Bienvenida y Objetivos\n4\nIntroducción a Power Automate\nObjetivo: Automatizar tareas y procesos repetitivos dentro de una organización\n\n¿Qué es Power Automate?\n\nUna herramienta que te permite automatizar flujos de trabajo repetitivos.\nFunciona conectando diferentes aplicaciones y servicios.\nDiseñado para negocios, usuarios no técnicos así como para desarrolladores\nAgiliza los procesos de aprobación para que ocurran automáticamente\nSe integra con otras aplicaciones de Microsoft\nAumenta la productividad, elimina las inconsistencias y permite enfocarse en los asuntos críticos"
+    },
+    {
+      "slide": 5,
+      "text": "Tipos de flujos\nPower Automate\n5"
+    },
+    {
+      "slide": 6,
+      "text": "Triggers y conectores\nDefinición de Triggers: Los triggers son disparadores que inician flujos\nDefinición de Conectores: Los conectores enlazan aplicaciones para automatizar procesos.\nEjemplos Comunes: Outlook, Teams y SharePoint son ejemplos populares que utilizan triggers y conectores para integrar funciones.\n6\nPower Automate"
+    },
+    {
+      "slide": 7,
+      "text": "7\nTriggers y conectores\nPower Automate"
+    },
+    {
+      "slide": 8,
+      "text": "Laboratorios prácticos con SharePoint\nPower Automate\n8\nLaboratorio 1: \nCrear un flujo automatizado que permita agregar registros en listas de sharepoint, guarde documentos adjuntos y envie correo notificando\n\nLaboratorio 2:\nEjercicio para automatizar la aprobación de documentos en bibliotecas de SharePoint usando flujos automáticos.\n\nLaboratorio 3: \nConfigurar flujos programados para enviar recordatorios sobre vencimientos de contratos desde Excel Online\n\nLaboratorio 4:\nConfigurar flujos para actualizer el Dataset de un reporte de Power BI"
+    },
+    {
+      "slide": 9,
+      "text": "Módulo AI Hub y AI Builder\nMódulo AI Hub\nAI Hub es un módulo central que facilita la integración de inteligencia artificial en procesos automatizados.\nUbicación en Power Automate\nEl módulo AI Hub se encuentra dentro de Power Automate, permitiendo fácil acceso y uso en flujos de trabajo.\nLaboratorio 6\nConfigurar un flujo manual con AI Builder para capturar textos de archivos PDF o imágenes.\n9\nIntroducción"
+    },
+    {
+      "slide": 10,
+      "text": "Gobierno y buenas prácticas\nCompartir flujos\nEs recomendable compartir los flujos con otros usuarios o miembros del equipo para evitar que exista un único propietario. De esta manera se garantiza la continuidad y administración adecuada en caso de ausencias o cambios de rol.\n\nDesarrollar documento Técnico\nSe debe elaborar un documento técnico en Word que describa paso a paso la configuración y funcionamiento del flujo creado. Este documento servirá como soporte para futuras mejoras, revisiones y correcciones de errores, facilitando el mantenimiento y la transferencia de conocimiento.\n\nInventario de Flujos\nEs una buena práctica mantener un inventario sencillo en Excel con el listado de flujos creados. Este registro permite identificar rápidamente cada flujo, su finalidad, la persona que lo creó y el área responsable, lo cual agiliza las consultas y el seguimiento.\n10\nPower Automate\nCard Workflows Teams\nTarjeta generada en Teams cuando se crea un nuevo flujo"
+    },
+    {
+      "slide": 11,
+      "text": "Automatización de reportes SAP mediante Scripts\nAutomatización de reportes\nLa automatización facilita la generación eficiente de reportes en SAP, reduciendo tiempos y errores.\nUso de scripts grabados\nScripts grabados permiten ejecutar tareas repetitivas de forma precisa y rápida en SAP.\nLineamientos clave\nSe establecen pautas para crear y gestionar scripts que aseguran la correcta automatización.\n11\nSAP"
+    },
+    {
+      "slide": 12,
+      "text": "Cierre y espacio de preguntas\nPreguntas y comentarios\n12"
+    }
+  ],
+  "images": {
+    "1": [
+      "assets/slide01_img01.jpg",
+      "assets/slide01_img02.png"
+    ],
+    "2": [],
+    "3": [
+      "assets/slide03_img03.jpg"
+    ],
+    "4": [
+      "assets/slide04_img04.png"
+    ],
+    "5": [],
+    "6": [],
+    "7": [],
+    "8": [
+      "assets/slide08_img05.png",
+      "assets/slide08_img06.png",
+      "assets/slide08_img07.png",
+      "assets/slide08_img08.png",
+      "assets/slide08_img09.png",
+      "assets/slide08_img10.png",
+      "assets/slide08_img11.png",
+      "assets/slide08_img12.png",
+      "assets/slide08_img13.png"
+    ],
+    "9": [],
+    "10": [
+      "assets/slide10_img14.png",
+      "assets/slide10_img15.png",
+      "assets/slide10_img16.png"
+    ],
+    "11": [],
+    "12": []
+  },
+  "qr": {
+    "power_automate": "assets/qr_power_automate.png",
+    "sharepoint": "assets/qr_sharepoint.png"
+  },
+  "palette": {
+    "enel_red": "#e61400",
+    "enel_blue": "#0555fa",
+    "enel_magenta": "#ff0f64",
+    "enel_green_dark": "#008c5a",
+    "enel_orange": "#ff5a0f",
+    "enel_light_blue": "#41b9e6",
+    "enel_pink": "#ff4687",
+    "enel_green_light": "#55be5a",
+    "grey": "#c6c6c6"
+  }
+}
